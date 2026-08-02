@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /day2_responses/{responseId} {
+      allow create: if request.resource.data.keys().hasAll(['journeyId','candidate','answers','submittedAt'])
+        && request.resource.data.candidate.name is string
+        && request.resource.data.candidate.email is string
+        && request.resource.data.answers.keys().hasAll(['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10']);
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
