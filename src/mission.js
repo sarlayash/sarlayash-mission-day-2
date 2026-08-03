@@ -1,14 +1,30 @@
-import { auth } from './firebase.js';
+import { auth, db } from './firebase.js';
+
 import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
 } from 'firebase/auth';
 
+import {
+  collection,
+  query,
+  where,
+  getDocs
+} from 'firebase/firestore';
+
+
 const root = document.querySelector('#mission-app');
 
+
+/* =========================================================
+   LOGIN SCREEN
+========================================================= */
+
 function showLogin() {
+
   root.innerHTML = `
+
     <main class="mission-login">
 
       <div class="mission-brand">
@@ -17,7 +33,9 @@ function showLogin() {
 
       <section class="login-card">
 
-        <p class="eyebrow">YOUR JOURNEY BEGINS HERE</p>
+        <p class="eyebrow">
+          YOUR JOURNEY BEGINS HERE
+        </p>
 
         <h1>
           Enter Your
@@ -25,30 +43,41 @@ function showLogin() {
         </h1>
 
         <p class="intro">
-          Your Journey ID is your identity inside the SarlaYash Mission.
+          Use your registered Email ID and Journey ID
+          to enter your SarlaYash Mission.
         </p>
 
         <form id="mission-login">
 
           <label>
-            JOURNEY ID
+
+            EMAIL ID
+
             <input
-              type="text"
-              name="journeyId"
-              placeholder="SYM-D2-2026-XXXX"
+              type="email"
+              name="email"
+              placeholder="Enter your registered email"
+              autocomplete="email"
               required
             >
+
           </label>
 
+
           <label>
-            PASSWORD
+
+            JOURNEY ID
+
             <input
               type="password"
               name="password"
-              placeholder="Enter your password"
+              placeholder="Enter your Journey ID"
+              autocomplete="current-password"
               required
             >
+
           </label>
+
 
           <button type="submit">
             ENTER MISSION →
@@ -56,83 +85,103 @@ function showLogin() {
 
         </form>
 
+
         <p id="login-message"></p>
 
       </section>
 
     </main>
+
   `;
 
-  document.querySelector('#mission-login').onsubmit = async (e) => {
+
+  const loginForm =
+    document.querySelector('#mission-login');
+
+
+  loginForm.onsubmit = async (e) => {
 
     e.preventDefault();
 
-    const data = Object.fromEntries(new FormData(e.target));
 
-    const journeyId = data.journeyId.trim().toUpperCase();
+    const data =
+      Object.fromEntries(
+        new FormData(e.target)
+      );
 
-    /*
-      Firebase Authentication requires an email internally.
 
-      Interns will NEVER need to know this.
+    const email =
+      data.email
+        .trim()
+        .toLowerCase();
 
-      Example:
-      SYM-D2-2026-8825
-      becomes internally:
-      sym-d2-2026-8825@mission.sarlayash.com
-    */
 
-    const internalEmail =
-      journeyId.toLowerCase() + '@mission.sarlayash.com';
+    const journeyId =
+      data.password
+        .trim()
+        .toUpperCase();
+
 
     const message =
       document.querySelector('#login-message');
 
-    message.textContent = 'Verifying Journey ID...';
+
+    message.textContent =
+      'Verifying your mission credentials...';
+
 
     try {
 
       await signInWithEmailAndPassword(
         auth,
-        internalEmail,
-        data.password
+        email,
+        journeyId
       );
 
-    } catch (error) {
+    }
 
-      console.error(error);
+    catch (error) {
+
+      console.error(
+        'Mission Login Error:',
+        error
+      );
+
 
       message.textContent =
-        'Journey ID or password is incorrect.';
+        'Email ID or Journey ID is incorrect.';
 
     }
 
   };
+
 }
 
 
-function showMission(user) {
+/* =========================================================
+   MISSION DASHBOARD
+========================================================= */
 
-  const journeyId =
+async function showMission(user) {
+
+  const email =
     user.email
-      .replace('@mission.sarlayash.com', '')
-      .toUpperCase();
+      ?.trim()
+      .toLowerCase();
+
+
+  if (!email) {
+
+    await signOut(auth);
+
+    return;
+
+  }
+
 
   root.innerHTML = `
 
     <main class="mission-dashboard">
-
-      <header>
-
-        <div>
-          SARLAYASH MISSION
-        </div>
-
-        <button id="logout">
-          SIGN OUT
-        </button>
-
-      </header>
 
       <section>
 
@@ -141,12 +190,12 @@ function showMission(user) {
         </p>
 
         <h1>
-          Welcome,
-          <em>${journeyId}</em>
+          Loading Your
+          <em>Mission...</em>
         </h1>
 
         <p>
-          Your Month 01 journey will appear here.
+          Please wait while we prepare your journey.
         </p>
 
       </section>
@@ -155,22 +204,300 @@ function showMission(user) {
 
   `;
 
-  document.querySelector('#logout').onclick =
-    () => signOut(auth);
+
+  try {
+
+    /* -----------------------------------------------------
+       FIND STUDENT IN FIRESTORE
+    ----------------------------------------------------- */
+
+    const studentQuery = query(
+
+      collection(
+        db,
+        'mission_users'
+      ),
+
+      where(
+        'authEmail',
+        '==',
+        email
+      )
+
+    );
+
+
+    const snapshot =
+      await getDocs(studentQuery);
+
+
+    /* -----------------------------------------------------
+       NO MATCHING MISSION RECORD
+    ----------------------------------------------------- */
+
+    if (snapshot.empty) {
+
+      root.innerHTML = `
+
+        <main class="mission-dashboard">
+
+          <header>
+
+            <div>
+              SARLAYASH MISSION
+            </div>
+
+            <button id="logout">
+              SIGN OUT
+            </button>
+
+          </header>
+
+
+          <section>
+
+            <p class="eyebrow">
+              MISSION CONTROL
+            </p>
+
+            <h1>
+              Mission Record
+              <em>Not Found.</em>
+            </h1>
+
+            <p>
+              ${email}
+            </p>
+
+            <p>
+              Your login is valid, but no Mission record
+              is currently connected to this account.
+            </p>
+
+          </section>
+
+        </main>
+
+      `;
+
+
+      document
+        .querySelector('#logout')
+        .onclick =
+          () => signOut(auth);
+
+
+      return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       STUDENT RECORD
+    ----------------------------------------------------- */
+
+    const student =
+      snapshot.docs[0].data();
+
+
+    const name =
+      student.name || 'Mission Member';
+
+
+    const journeyId =
+      student.journeyId || 'Not Assigned';
+
+
+    const course =
+      student.course || 'Not Assigned';
+
+
+    const month =
+      student.month ?? 1;
+
+
+    const status =
+      student.status || 'ACTIVE';
+
+
+    const completedHours =
+      student.completedHours ?? 0;
+
+
+    const totalHours =
+      student.totalHours ?? 0;
+
+
+    /* -----------------------------------------------------
+       STUDENT DASHBOARD
+    ----------------------------------------------------- */
+
+    root.innerHTML = `
+
+      <main class="mission-dashboard">
+
+        <header>
+
+          <div>
+            SARLAYASH MISSION
+          </div>
+
+          <button id="logout">
+            SIGN OUT
+          </button>
+
+        </header>
+
+
+        <section>
+
+          <p class="eyebrow">
+            MISSION CONTROL
+          </p>
+
+
+          <h1>
+            Welcome,
+            <em>${name}</em>
+          </h1>
+
+
+          <p>
+            Your SarlaYash Mission is now active.
+          </p>
+
+
+          <div class="mission-profile">
+
+            <p>
+              <strong>Journey ID:</strong>
+              ${journeyId}
+            </p>
+
+            <p>
+              <strong>Email:</strong>
+              ${email}
+            </p>
+
+            <p>
+              <strong>Course:</strong>
+              ${course}
+            </p>
+
+            <p>
+              <strong>Month:</strong>
+              ${month}
+            </p>
+
+            <p>
+              <strong>Status:</strong>
+              ${status}
+            </p>
+
+            <p>
+              <strong>Completed Hours:</strong>
+              ${completedHours}
+            </p>
+
+            <p>
+              <strong>Total Hours:</strong>
+              ${totalHours}
+            </p>
+
+          </div>
+
+
+          <p>
+            Your Month ${String(month).padStart(2, '0')}
+            journey will appear here.
+          </p>
+
+        </section>
+
+      </main>
+
+    `;
+
+
+    document
+      .querySelector('#logout')
+      .onclick =
+        () => signOut(auth);
+
+  }
+
+
+  /* =======================================================
+     FIRESTORE ERROR
+  ======================================================= */
+
+  catch (error) {
+
+    console.error(
+      'Mission Loading Error:',
+      error
+    );
+
+
+    root.innerHTML = `
+
+      <main class="mission-dashboard">
+
+        <section>
+
+          <p class="eyebrow">
+            MISSION CONTROL
+          </p>
+
+          <h1>
+            Unable to Load
+            <em>Mission.</em>
+          </h1>
+
+          <p>
+            Please try again.
+          </p>
+
+          <button id="logout">
+            SIGN OUT
+          </button>
+
+        </section>
+
+      </main>
+
+    `;
+
+
+    document
+      .querySelector('#logout')
+      .onclick =
+        () => signOut(auth);
+
+  }
 
 }
 
 
-onAuthStateChanged(auth, (user) => {
+/* =========================================================
+   AUTHENTICATION STATE
+========================================================= */
 
-  if (user) {
+onAuthStateChanged(
+  auth,
+  (user) => {
 
-    showMission(user);
+    if (user) {
 
-  } else {
+      showMission(user);
 
-    showLogin();
+    }
+
+    else {
+
+      showLogin();
+
+    }
 
   }
-
-});
+);
