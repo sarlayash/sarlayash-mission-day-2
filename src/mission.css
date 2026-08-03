@@ -511,3 +511,56 @@ body {
     padding: 20px 16px;
   }
 }
+
+/* ================================
+   ENTER MISSION — GOLD CTA
+================================ */
+
+.mission-login button,
+#mission-app button[type="submit"] {
+  width: 100%;
+  min-height: 52px;
+
+  background: linear-gradient(
+    135deg,
+    #b8860b 0%,
+    #d4af37 35%,
+    #f1d36b 55%,
+    #c99a16 100%
+  );
+
+  color: #080808;
+  border: 1px solid #e0bb45;
+  border-radius: 4px;
+
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(212, 175, 55, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.mission-login button:hover,
+#mission-app button[type="submit"]:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+
+  box-shadow:
+    0 12px 32px rgba(212, 175, 55, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mission-login button:active,
+#mission-app button[type="submit"]:active {
+  transform: translateY(0);
+}
