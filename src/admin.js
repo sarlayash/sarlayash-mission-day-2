@@ -1,117 +1,858 @@
-import {auth,db,firebaseReady} from './firebase.js';
-import {signInWithEmailAndPassword,signOut,onAuthStateChanged} from 'firebase/auth';
-import {collection,getDocs,doc,updateDoc} from 'firebase/firestore';
-import {questions} from './questions.js';
-const root=document.querySelector('#admin-app'), esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); let rows=[];
-const domains={'Artificial Intelligence / ML':['ai','machine learning','llm','prompt'],'Software Development':['code','coding','javascript','python','java','software','api'],'Data Analytics':['data','excel','power bi','tableau','analytics','sql'],'UI/UX':['design','figma','ux','ui'],'Cybersecurity':['security','cyber'],'Cloud / DevOps':['cloud','devops','aws','azure'],'Digital Marketing':['marketing','seo','campaign'],'Content / Communication':['writing','content','communication'],'Finance':['finance','financial'],'Research':['research'],'Entrepreneurship':['business','startup']};
-function signal(r){
-  let t = Object.values(r.answers || {}).join(' ').toLowerCase();
+import {
+  auth,
+  db,
+  firebaseReady
+} from './firebase.js';
 
-  let m = Object.entries(domains)
-    .map(([d,w]) => [
-      d,
-      w.reduce((n,x) => n + ((t.match(new RegExp(x,'g')) || []).length), 0)
-    ])
-    .filter(x => x[1])
-    .sort((a,b) => b[1] - a[1]);
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+} from 'firebase/auth';
 
-  return {
-    primary: m[0]?.[0] || 'Other / Undetermined',
-    secondary: m.slice(1,3).map(x => x[0]),
-    confidence: m[0]?.[1] >= 3 ? 'Emerging signal' : 'Human review required'
-  };
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs
+} from 'firebase/firestore';
+
+import {
+  showOnboardingControl
+} from './onboarding-admin.js';
+
+import {
+  showMissionControl
+} from './mission-admin.js';
+
+
+// ======================================================
+// ROOT + STATE
+// ======================================================
+
+const root =
+  document.querySelector('#admin-app');
+
+let currentAdmin = null;
+
+
+// ======================================================
+// HEADER
+// ======================================================
+
+function header() {
+
+  return `
+    <div class="grain"></div>
+
+    <header>
+
+      <a
+        class="brand"
+        href="/"
+      >
+        SARLAYASH <i>MISSION</i>
+      </a>
+
+      <span class="day">
+        SUPER ADMIN
+      </span>
+
+    </header>
+  `;
+
 }
-const header=()=>`<div class="grain"></div><header><a class="brand" href="/">SARLAYASH <i>MISSION</i></a><span class="day">ADMIN · DAY 2</span></header>`;
-function login(){root.innerHTML=header()+`<section class="form-page"><p class="eyebrow">RESTRICTED ACCESS</p><h2>Talent Intelligence <em>Dashboard</em></h2><p class="intro">Sign in with an authorised SarlaYash administrator account.</p><form id="login" class="fields"><label>Email<input required type="email" name="email"></label><label>Password<input required type="password" name="password"></label><button class="gold" type="submit">SIGN IN →</button></form></section>`;document.querySelector('#login').onsubmit=async e=>{e.preventDefault();let d=Object.fromEntries(new FormData(e.target));try{await signInWithEmailAndPassword(auth,d.email,d.password)}catch{alert('Unable to sign in. Check your credentials and Firebase Authentication setup.')}}}
-async function dashboard(){root.innerHTML=header()+`<section class="review-page"><p class="eyebrow">TALENT INTELLIGENCE DASHBOARD</p><h2>Batch 01 <em>Discovery Signals</em></h2><p class="intro">Human review required. Signals only reflect written responses and are never automatic decisions.</p><div id="board">Loading submitted discoveries…</div></section>`;let s=await getDocs(collection(db,'day2_responses'));rows=s.docs.map(x=>({id:x.id,...x.data(),sig:signal(x.data())}));draw()}
-function draw(){let counts={};rows.forEach(r=>counts[r.sig.primary]=(counts[r.sig.primary]||0)+1);let top=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—',review=rows.filter(r=>(r.adminReview?.status||'NEW')==='NEW').length;let list=rows.map((r,i)=>`<tr><td>${esc(r.journeyId)}</td><td><b>${esc(r.candidate?.name)}</b><br><small>${esc(r.candidate?.email)}</small></td><td>${esc(r.candidate?.course||'—')}</td><td>${esc(r.sig.primary)}</td><td>${esc(r.adminReview?.status||'NEW')}</td><td><button class="ghost open" data-i="${i}">VIEW →</button></td></tr>`).join('');let chart=Object.entries(counts).map(([d,n])=>`<div class="signal"><span>${esc(d)}</span><b>${n}</b></div>`).join('')||'<p class="quiet">No Day 2 discoveries submitted yet.</p>';document.querySelector('#board').innerHTML=`<div class="metrics"><article><small>TOTAL RESPONSES</small><b>${rows.length}</b></article><article><small>EMERGING DOMAIN</small><b>${esc(top)}</b></article><article><small>REQUIRING REVIEW</small><b>${review}</b></article><article><small>DOMAINS DISCOVERED</small><b>${Object.keys(counts).length}</b></article></div><div class="toolbar"><input id="search" placeholder="Search name, email, Journey ID, keyword…"><button class="ghost" id="csv">DOWNLOAD CSV</button><button class="ghost" id="out">SIGN OUT</button></div><h3 class="section-title">DOMAIN SIGNALS</h3><div class="signals">${chart}</div><h3 class="section-title">CANDIDATES</h3><div class="table-wrap"><table><thead><tr><th>Journey ID</th><th>Name</th><th>Course</th><th>Primary signal</th><th>Status</th><th></th></tr></thead><tbody>${list}</tbody></table></div>`;document.querySelectorAll('.open').forEach(b=>b.onclick=()=>profile(rows[+b.dataset.i]));document.querySelector('#search').oninput=e=>{let q=e.target.value.toLowerCase();document.querySelectorAll('tbody tr').forEach((x,i)=>x.hidden=!JSON.stringify(rows[i]).toLowerCase().includes(q))};document.querySelector('#out').onclick=()=>signOut(auth);document.querySelector('#csv').onclick=csv}
-function profile(r){let answers=questions.map((q,i)=>`<article class="review"><span>QUESTION ${String(i+1).padStart(2,'0')}</span><h3>${q[0]}</h3><p>${esc(r.answers?.['q'+(i+1)])}</p></article>`).join('');let dirs=[r.sig.primary,...r.sig.secondary,'Exploratory real-world project'].filter((v,i,a)=>v&&a.indexOf(v)===i).slice(0,3).map((d,i)=>`<article><small>DIRECTION ${String(i+1).padStart(2,'0')}</small><h3>${esc(d)}</h3><p>Suggested from the candidate’s written interests and goals. Human review is required before allocation.</p></article>`).join('');root.innerHTML=header()+`<section class="review-page"><button class="ghost" id="back">← BACK TO DASHBOARD</button><p class="eyebrow" style="margin-top:30px">INDIVIDUAL TALENT PROFILE</p><h2>${esc(r.candidate?.name)} <em>· ${esc(r.journeyId)}</em></h2><div class="candidate"><strong>${esc(r.candidate?.email)}</strong><span>${esc(r.candidate?.course||'')} · ${esc(r.candidate?.yearStatus||'')}</span></div><h3 class="section-title">TALENT INTELLIGENCE</h3><div class="intelligence"><article><small>PRIMARY DOMAIN SIGNAL</small><b>${esc(r.sig.primary)}</b></article><article><small>SECONDARY SIGNALS</small><b>${esc(r.sig.secondary.join(' · ')||'Undetermined')}</b></article><article><small>CONFIDENCE</small><b>${r.sig.confidence}</b></article></div><h3 class="section-title">SUGGESTED WORK DIRECTIONS</h3><div class="directions">${dirs}</div><h3 class="section-title">ADMIN NOTES</h3><form id="notes" class="fields"><label>Status<select name="status">${['NEW','REVIEWED','DOMAIN MAPPED','WORK ASSIGNED','ACTIVE'].map(x=>`<option ${(r.adminReview?.status||'NEW')===x?'selected':''}>${x}</option>`).join('')}</select></label><label>Primary Domain Assigned<input name="assignedDomain" value="${esc(r.adminReview?.assignedDomain)}"></label><label>Secondary Domain<input name="secondaryDomain" value="${esc(r.adminReview?.secondaryDomain)}"></label><label>Mentor Assigned<input name="mentor" value="${esc(r.adminReview?.mentor)}"></label><label>First Assignment<input name="firstAssignment" value="${esc(r.adminReview?.firstAssignment)}"></label><label>Priority<input name="priority" value="${esc(r.adminReview?.priority)}"></label><label style="grid-column:1/-1">Mentor Notes<textarea name="notes">${esc(r.adminReview?.notes)}</textarea></label><button class="gold">SAVE ADMIN REVIEW</button><button type="button" class="ghost" id="print">PRINT PROFILE</button></form><h3 class="section-title">ORIGINAL RESPONSES</h3>${answers}</section>`;document.querySelector('#back').onclick=dashboard;document.querySelector('#print').onclick=()=>window.print();document.querySelector('#notes').onsubmit=async e=>{e.preventDefault();let adminReview=Object.fromEntries(new FormData(e.target));await updateDoc(doc(db,'day2_responses',r.id),{adminReview});alert('Admin review saved.')}}
-function csv() {
-  // CSV-safe value
-  const cell = (v) =>
-    `"${String(v ?? '')
-      .replaceAll('"', '""')
-      .replace(/\r?\n/g, ' ')
-      .trim()}"`;
 
-  // Headers
-  const headers = [
-    'Journey ID',
-    'Name',
-    'Email',
-    'Course',
-    'Year / Status',
 
-    ...questions.map((q, i) =>
-      `Q${i + 1} - ${q[0]}`
-    ),
+// ======================================================
+// LOGIN
+// ======================================================
 
-    'Primary Domain Signal',
-    'Secondary Domain Signals',
-    'Signal Confidence',
+function login() {
 
-    'Admin Status',
-    'Assigned Primary Domain',
-    'Assigned Secondary Domain',
-    'Mentor Assigned',
-    'First Assignment',
-    'Priority',
-    'Mentor Notes'
-  ];
+  root.innerHTML =
+    header() +
+    `
+      <section class="form-page">
 
-  // All candidate records
-  const dataRows = rows.map(r => [
-    r.journeyId,
-    r.candidate?.name,
-    r.candidate?.email,
-    r.candidate?.course,
-    r.candidate?.yearStatus,
+        <p class="eyebrow">
+          RESTRICTED ACCESS
+        </p>
 
-    // Q1-Q10
-    ...questions.map((q, i) =>
-      r.answers?.[`q${i + 1}`] || ''
-    ),
+        <h2>
+          Super Admin
+          <em>Command Centre.</em>
+        </h2>
 
-    // Talent intelligence
-    r.sig?.primary,
-    r.sig?.secondary?.join(' | '),
-    r.sig?.confidence,
+        <p class="intro">
+          Control the complete learner Journey —
+          from the 10-question assessment
+          to Day 3 Mission progression.
+        </p>
 
-    // Admin review
-    r.adminReview?.status || 'NEW',
-    r.adminReview?.assignedDomain,
-    r.adminReview?.secondaryDomain,
-    r.adminReview?.mentor,
-    r.adminReview?.firstAssignment,
-    r.adminReview?.priority,
-    r.adminReview?.notes
-  ]);
 
-  // Build CSV
-  const out = [
-    headers.map(cell).join(','),
-    ...dataRows.map(row => row.map(cell).join(','))
-  ];
+        <form
+          id="super-login"
+          class="fields"
+        >
 
-  // Add UTF-8 BOM so Excel handles text properly
-  const blob = new Blob(
-    ['\uFEFF' + out.join('\r\n')],
-    { type: 'text/csv;charset=utf-8;' }
+          <label>
+
+            Email
+
+            <input
+              required
+              type="email"
+              name="email"
+              autocomplete="email"
+            >
+
+          </label>
+
+
+          <label>
+
+            Password
+
+            <input
+              required
+              type="password"
+              name="password"
+              autocomplete="current-password"
+            >
+
+          </label>
+
+
+          <button
+            class="gold"
+            type="submit"
+          >
+            ENTER COMMAND CENTRE →
+          </button>
+
+        </form>
+
+      </section>
+    `;
+
+
+  document
+    .querySelector('#super-login')
+    .onsubmit =
+      async event => {
+
+        event.preventDefault();
+
+
+        const data =
+          Object.fromEntries(
+            new FormData(
+              event.target
+            )
+          );
+
+
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            data.email,
+            data.password
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          alert(
+            'Unable to sign in. Check your administrator credentials.'
+          );
+
+        }
+
+      };
+
+}
+
+
+// ======================================================
+// ACCESS DENIED
+// ======================================================
+
+function accessDenied() {
+
+  root.innerHTML =
+    header() +
+    `
+      <section class="form-page">
+
+        <p class="eyebrow">
+          ACCESS DENIED
+        </p>
+
+        <h2>
+          Super Admin
+          <em>Authorization Required.</em>
+        </h2>
+
+        <p class="intro">
+          This Firebase account may be authenticated,
+          but it is not authorised to access
+          the SarlaYash Super Admin Command Centre.
+        </p>
+
+
+        <button
+          class="ghost"
+          id="denied-signout"
+        >
+          SIGN OUT
+        </button>
+
+      </section>
+    `;
+
+
+  document
+    .querySelector(
+      '#denied-signout'
+    )
+    .onclick =
+      () => signOut(auth);
+
+}
+
+
+// ======================================================
+// VERIFY SUPER ADMIN
+// ======================================================
+
+async function verifyAdmin(user) {
+
+  const adminRef =
+    doc(
+      db,
+      'admins',
+      user.uid
+    );
+
+
+  const snapshot =
+    await getDoc(
+      adminRef
+    );
+
+
+  if (!snapshot.exists()) {
+    return false;
+  }
+
+
+  const data =
+    snapshot.data();
+
+
+  return (
+    data.active === true &&
+    data.role === 'ADMIN'
   );
 
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-
-  a.href = url;
-  a.download =
-    `sarlayash-day2-talent-intelligence-${new Date()
-      .toISOString()
-      .slice(0, 10)}.csv`;
-
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  URL.revokeObjectURL(url);
 }
-if(!firebaseReady)root.innerHTML=header()+`<section class="form-page"><p class="eyebrow">CONFIGURATION REQUIRED</p><h2>Connect <em>Firebase.</em></h2><p class="intro">Copy .env.example to .env, add Firebase web app values, then restart. Admin access uses Firebase Authentication.</p></section>`;else onAuthStateChanged(auth,u=>u?dashboard():login());
+
+
+// ======================================================
+// LOAD COMMAND-CENTRE COUNTS
+// ======================================================
+
+async function loadOverview() {
+
+  const [
+    assessmentSnapshot,
+    missionUserSnapshot,
+    assignmentSnapshot
+  ] = await Promise.all([
+
+    getDocs(
+      collection(
+        db,
+        'day2_responses'
+      )
+    ),
+
+    getDocs(
+      collection(
+        db,
+        'mission_users'
+      )
+    ),
+
+    getDocs(
+      collection(
+        db,
+        'mission_assignments'
+      )
+    )
+
+  ]);
+
+
+  const assessments =
+    assessmentSnapshot.docs.map(
+      snapshot => ({
+        id: snapshot.id,
+        ...snapshot.data()
+      })
+    );
+
+
+  const missionUsers =
+    missionUserSnapshot.docs.map(
+      snapshot => ({
+        id: snapshot.id,
+        ...snapshot.data()
+      })
+    );
+
+
+  const assignments =
+    assignmentSnapshot.docs.map(
+      snapshot => ({
+        id: snapshot.id,
+        ...snapshot.data()
+      })
+    );
+
+
+  const approvedForDay3 =
+    assessments.filter(
+      record =>
+        record.adminReview
+          ?.day3Status ===
+        'APPROVED'
+    ).length;
+
+
+  const awaitingOnboardingReview =
+    assessments.filter(
+      record =>
+        !record.adminReview
+          ?.day3Status ||
+        record.adminReview
+          ?.day3Status ===
+          'PENDING'
+    ).length;
+
+
+  const missionReviewsPending =
+    assignments.filter(
+      assignment =>
+        assignment.status ===
+          'SUBMITTED' &&
+        assignment.reviewStatus ===
+          'PENDING'
+    ).length;
+
+
+  const approvedMissionHours =
+    assignments.filter(
+      assignment =>
+        assignment.reviewStatus ===
+        'APPROVED'
+    ).length;
+
+
+  return {
+
+    assessments:
+      assessments.length,
+
+    awaitingOnboardingReview,
+
+    approvedForDay3,
+
+    missionLearners:
+      missionUsers.length,
+
+    missionReviewsPending,
+
+    approvedMissionHours
+
+  };
+
+}
+
+
+// ======================================================
+// SUPER ADMIN HOME
+// ======================================================
+
+async function superAdminHome() {
+
+  root.innerHTML =
+    header() +
+    `
+      <section class="review-page">
+
+        <p class="eyebrow">
+          SARLAYASH JOURNEY OPERATING SYSTEM
+        </p>
+
+
+        <h2>
+          Super Admin
+          <em>Command Centre.</em>
+        </h2>
+
+
+        <p class="intro">
+          One control plane for the complete Journey —
+          assessment, human review,
+          Day 3 admission and Mission progression.
+        </p>
+
+
+        <div id="super-overview">
+          Loading Journey intelligence…
+        </div>
+
+      </section>
+    `;
+
+
+  try {
+
+    const overview =
+      await loadOverview();
+
+
+    drawSuperAdminHome(
+      overview
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    document
+      .querySelector(
+        '#super-overview'
+      )
+      .innerHTML =
+        `
+          <p class="quiet">
+            Unable to load Super Admin data.
+            Check Firestore permissions
+            and try again.
+          </p>
+        `;
+
+  }
+
+}
+
+
+// ======================================================
+// DRAW SUPER ADMIN HOME
+// ======================================================
+
+function drawSuperAdminHome(
+  overview
+) {
+
+  const board =
+    document.querySelector(
+      '#super-overview'
+    );
+
+
+  if (!board) {
+    return;
+  }
+
+
+  board.innerHTML =
+    `
+
+      <div class="metrics">
+
+        <article>
+
+          <small>
+            JOURNEYS STARTED
+          </small>
+
+          <b>
+            ${overview.assessments}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            AWAITING ENTRY REVIEW
+          </small>
+
+          <b>
+            ${overview.awaitingOnboardingReview}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            DAY 3 APPROVED
+          </small>
+
+          <b>
+            ${overview.approvedForDay3}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            ACTIVE MISSION LEARNERS
+          </small>
+
+          <b>
+            ${overview.missionLearners}
+          </b>
+
+        </article>
+
+      </div>
+
+
+      <h3 class="section-title">
+        COMMAND CENTRE
+      </h3>
+
+
+      <div class="directions">
+
+
+        <article>
+
+          <small>
+            CONTROL 01
+          </small>
+
+
+          <h3>
+            Onboarding Control
+          </h3>
+
+
+          <p>
+            Review every learner who has completed
+            the 10-question Journey assessment.
+            Human approval is the gate into Day 3.
+          </p>
+
+
+          <p>
+
+            <strong>
+              Awaiting Review:
+            </strong>
+
+            ${overview.awaitingOnboardingReview}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Approved for Day 3:
+            </strong>
+
+            ${overview.approvedForDay3}
+
+          </p>
+
+
+          <button
+            class="gold"
+            id="open-onboarding"
+          >
+            OPEN ONBOARDING CONTROL →
+          </button>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            CONTROL 02
+          </small>
+
+
+          <h3>
+            Mission Control
+          </h3>
+
+
+          <p>
+            Operate Day 3 Hours 01–16.
+            Review LinkedIn evidence,
+            approve progression and
+            return work for revision.
+          </p>
+
+
+          <p>
+
+            <strong>
+              Mission Learners:
+            </strong>
+
+            ${overview.missionLearners}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Evidence Awaiting Review:
+            </strong>
+
+            ${overview.missionReviewsPending}
+
+          </p>
+
+
+          <button
+            class="gold"
+            id="open-mission"
+          >
+            OPEN MISSION CONTROL →
+          </button>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            SYSTEM INTELLIGENCE
+          </small>
+
+
+          <h3>
+            Journey Pipeline
+          </h3>
+
+
+          <p>
+            Assessment → Super Admin Review →
+            Day 3 Admission → Hour 01–16 →
+            Evidence → Human Review.
+          </p>
+
+
+          <p>
+
+            <strong>
+              Approved Mission Hours:
+            </strong>
+
+            ${overview.approvedMissionHours}
+
+          </p>
+
+
+          <button
+            class="ghost"
+            id="refresh-super"
+          >
+            REFRESH DASHBOARD
+          </button>
+
+        </article>
+
+      </div>
+
+
+      <div
+        class="toolbar"
+        style="margin-top:40px"
+      >
+
+        <div>
+
+          <small>
+            SIGNED IN AS
+          </small>
+
+          <br>
+
+          <strong>
+            ${currentAdmin?.email || '—'}
+          </strong>
+
+        </div>
+
+
+        <button
+          class="ghost"
+          id="super-signout"
+        >
+          SIGN OUT
+        </button>
+
+      </div>
+    `;
+
+
+  document
+    .querySelector(
+      '#open-onboarding'
+    )
+    .onclick =
+      () =>
+        showOnboardingControl(
+          root
+        );
+
+
+  document
+    .querySelector(
+      '#open-mission'
+    )
+    .onclick =
+      () =>
+        showMissionControl(
+          root,
+          currentAdmin
+        );
+
+
+  document
+    .querySelector(
+      '#refresh-super'
+    )
+    .onclick =
+      superAdminHome;
+
+
+  document
+    .querySelector(
+      '#super-signout'
+    )
+    .onclick =
+      () => signOut(auth);
+
+}
+
+
+// ======================================================
+// CHILD MODULE → SUPER ADMIN HOME
+// ======================================================
+
+window.addEventListener(
+  'sarlayash:super-admin-home',
+  () => {
+
+    if (currentAdmin) {
+      superAdminHome();
+    }
+
+  }
+);
+
+
+// ======================================================
+// FIREBASE BOOT
+// ======================================================
+
+if (!firebaseReady) {
+
+  root.innerHTML =
+    header() +
+    `
+      <section class="form-page">
+
+        <p class="eyebrow">
+          CONFIGURATION REQUIRED
+        </p>
+
+        <h2>
+          Connect
+          <em>Firebase.</em>
+        </h2>
+
+        <p class="intro">
+          Firebase configuration
+          is unavailable.
+        </p>
+
+      </section>
+    `;
+
+} else {
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if (!user) {
+
+        currentAdmin = null;
+
+        login();
+
+        return;
+
+      }
+
+
+      try {
+
+        const authorised =
+          await verifyAdmin(
+            user
+          );
+
+
+        if (!authorised) {
+
+          currentAdmin = null;
+
+          accessDenied();
+
+          return;
+
+        }
+
+
+        currentAdmin =
+          user;
+
+
+        await superAdminHome();
+
+      } catch (error) {
+
+        console.error(error);
+
+        currentAdmin = null;
+
+        accessDenied();
+
+      }
+
+    }
+  );
+
+}
