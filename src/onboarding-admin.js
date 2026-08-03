@@ -806,7 +806,6 @@ function drawDashboard() {
 
 }
 
-
 // ======================================================
 // INDIVIDUAL ASSESSMENT
 // ======================================================
@@ -1317,7 +1316,6 @@ function showAssessment(record) {
 
 }
 
-
 // ======================================================
 // SAVE REVIEW
 // ======================================================
@@ -1476,6 +1474,10 @@ function exportCsv() {
         .trim()}"`;
 
 
+  // ====================================================
+  // CSV HEADERS
+  // ====================================================
+
   const headers = [
 
     'Journey ID',
@@ -1485,6 +1487,13 @@ function exportCsv() {
     'Email',
 
     'Course',
+
+    // Each assessment question gets
+    // its own individual CSV column.
+    ...questions.map(
+      (question, index) =>
+        `Q${index + 1} - ${question[0]}`
+    ),
 
     'Primary Signal',
 
@@ -1511,6 +1520,10 @@ function exportCsv() {
   ];
 
 
+  // ====================================================
+  // LEARNER DATA ROWS
+  // ====================================================
+
   const dataRows =
     rows.map(
       record => [
@@ -1522,6 +1535,16 @@ function exportCsv() {
         record.candidate?.email,
 
         record.candidate?.course,
+
+        // Q1 through Q10.
+        // Every answer sits beneath its
+        // corresponding full question.
+        ...questions.map(
+          (question, index) =>
+            record.answers?.[
+              `q${index + 1}`
+            ] || ''
+        ),
 
         record.sig.primary,
 
@@ -1560,6 +1583,9 @@ function exportCsv() {
       ]
     );
 
+  // ====================================================
+  // BUILD CSV
+  // ====================================================
 
   const output = [
 
@@ -1576,6 +1602,10 @@ function exportCsv() {
 
   ];
 
+
+  // ====================================================
+  // CREATE UTF-8 CSV FILE
+  // ====================================================
 
   const blob =
     new Blob(
