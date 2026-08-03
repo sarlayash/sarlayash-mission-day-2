@@ -43,8 +43,8 @@
 }
 
 .mission-brand {
-  font-size: 12px;
-  letter-spacing: 4px;
+  font-size: 24px;
+  letter-spacing: 6px;
   text-transform: uppercase;
   color: #d4af37;
   margin-bottom: 45px;
@@ -563,4 +563,12 @@ body {
 .mission-login button:active,
 #mission-app button[type="submit"]:active {
   transform: translateY(0);
+}
+
+/* BIG SARLAYASH MISSION BRAND */
+.mission-brand {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  letter-spacing: 7px !important;
+  line-height: 1.2;
 }
