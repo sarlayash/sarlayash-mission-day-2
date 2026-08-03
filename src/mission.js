@@ -17,14 +17,13 @@ import {
 const root = document.querySelector('#mission-app');
 
 
-/* =========================================================
-   LOGIN SCREEN
-========================================================= */
+// ======================================================
+// LOGIN SCREEN
+// ======================================================
 
 function showLogin() {
 
   root.innerHTML = `
-
     <main class="mission-login">
 
       <div class="mission-brand">
@@ -43,39 +42,33 @@ function showLogin() {
         </h1>
 
         <p class="intro">
-          Use your registered Email ID and Journey ID
-          to enter your SarlaYash Mission.
+          Enter your registered Email ID and Journey ID
+          to access your SarlaYash Mission.
         </p>
 
         <form id="mission-login">
 
           <label>
-
             EMAIL ID
 
             <input
               type="email"
               name="email"
               placeholder="Enter your registered email"
-              autocomplete="email"
               required
             >
-
           </label>
 
 
           <label>
-
             JOURNEY ID
 
             <input
               type="password"
               name="password"
               placeholder="Enter your Journey ID"
-              autocomplete="current-password"
               required
             >
-
           </label>
 
 
@@ -85,99 +78,75 @@ function showLogin() {
 
         </form>
 
-
         <p id="login-message"></p>
 
       </section>
 
     </main>
-
   `;
 
 
-  const loginForm =
-    document.querySelector('#mission-login');
+  document.querySelector('#mission-login').onsubmit =
+    async (event) => {
+
+      event.preventDefault();
+
+      const data =
+        Object.fromEntries(
+          new FormData(event.target)
+        );
 
 
-  loginForm.onsubmit = async (e) => {
-
-    e.preventDefault();
-
-
-    const data =
-      Object.fromEntries(
-        new FormData(e.target)
-      );
+      const email =
+        data.email
+          .trim()
+          .toLowerCase();
 
 
-    const email =
-      data.email
-        .trim()
-        .toLowerCase();
+      const journeyId =
+        data.password
+          .trim()
+          .toUpperCase();
 
 
-    const journeyId =
-      data.password
-        .trim()
-        .toUpperCase();
-
-
-    const message =
-      document.querySelector('#login-message');
-
-
-    message.textContent =
-      'Verifying your mission credentials...';
-
-
-    try {
-
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        journeyId
-      );
-
-    }
-
-    catch (error) {
-
-      console.error(
-        'Mission Login Error:',
-        error
-      );
+      const message =
+        document.querySelector('#login-message');
 
 
       message.textContent =
-        'Email ID or Journey ID is incorrect.';
+        'Verifying your mission credentials...';
 
-    }
 
-  };
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          journeyId
+        );
+
+      } catch (error) {
+
+        console.error(
+          'Mission Login Error:',
+          error
+        );
+
+        message.textContent =
+          'Email ID or Journey ID is incorrect.';
+
+      }
+
+    };
 
 }
 
 
-/* =========================================================
-   MISSION DASHBOARD
-========================================================= */
+// ======================================================
+// ERROR SCREEN
+// ======================================================
 
-async function showMission(user) {
-
-  const email =
-    user.email
-      ?.trim()
-      .toLowerCase();
-
-
-  if (!email) {
-
-    await signOut(auth);
-
-    return;
-
-  }
-
+function showError(message) {
 
   root.innerHTML = `
 
@@ -190,12 +159,83 @@ async function showMission(user) {
         </p>
 
         <h1>
-          Loading Your
-          <em>Mission...</em>
+          Unable to Load
+          <em>Mission.</em>
         </h1>
 
         <p>
-          Please wait while we prepare your journey.
+          ${message}
+        </p>
+
+        <button id="logout">
+          SIGN OUT
+        </button>
+
+      </section>
+
+    </main>
+
+  `;
+
+
+  document.querySelector('#logout').onclick =
+    () => signOut(auth);
+
+}
+
+
+// ======================================================
+// WAITING SCREEN
+// ======================================================
+
+function showWaiting(student) {
+
+  root.innerHTML = `
+
+    <main class="mission-dashboard">
+
+      <header>
+
+        <div>
+          SARLAYASH MISSION
+        </div>
+
+        <button id="logout">
+          SIGN OUT
+        </button>
+
+      </header>
+
+
+      <section>
+
+        <p class="eyebrow">
+          MISSION CONTROL
+        </p>
+
+        <h1>
+          Welcome,
+          <em>${student.name}</em>
+        </h1>
+
+
+        <p>
+          Your current mission has been completed.
+        </p>
+
+        <p>
+          Return when your next mission is revealed.
+        </p>
+
+
+        <p>
+          <strong>Journey ID:</strong>
+          ${student.journeyId}
+        </p>
+
+        <p>
+          <strong>Completed Hours:</strong>
+          ${student.completedHours}
         </p>
 
       </section>
@@ -205,233 +245,255 @@ async function showMission(user) {
   `;
 
 
+  document.querySelector('#logout').onclick =
+    () => signOut(auth);
+
+}
+
+
+// ======================================================
+// ACTIVE MISSION SCREEN
+// ======================================================
+
+function showActiveMission(student, assignment) {
+
+  root.innerHTML = `
+
+    <main class="mission-dashboard">
+
+      <header>
+
+        <div>
+          SARLAYASH MISSION
+        </div>
+
+        <button id="logout">
+          SIGN OUT
+        </button>
+
+      </header>
+
+
+      <section>
+
+        <p class="eyebrow">
+          MISSION CONTROL · HOUR ${String(assignment.hour).padStart(2, '0')}
+        </p>
+
+
+        <h1>
+          Welcome,
+          <em>${student.name}</em>
+        </h1>
+
+
+        <p>
+          Your SarlaYash Mission is active.
+        </p>
+
+
+        <p>
+          <strong>Journey ID:</strong>
+          ${student.journeyId}
+        </p>
+
+        <p>
+          <strong>Course:</strong>
+          ${student.course}
+        </p>
+
+        <p>
+          <strong>Month:</strong>
+          ${student.month}
+        </p>
+
+
+        <hr>
+
+
+        <p class="eyebrow">
+          TODAY'S MISSION
+        </p>
+
+
+        <h2>
+          ${assignment.theme}
+        </h2>
+
+
+        <p>
+          <strong>YOUR MISSION</strong>
+        </p>
+
+        <p>
+          ${assignment.deliverable}
+        </p>
+
+
+        <p>
+          <strong>TRANSFORMATION</strong>
+        </p>
+
+        <p>
+          ${assignment.outcome}
+        </p>
+
+
+        <p>
+          <strong>MISSION STATUS</strong>
+        </p>
+
+        <p>
+          ${assignment.status}
+        </p>
+
+
+        <hr>
+
+
+        <p>
+          Build it. Question it. Publish what you can defend.
+        </p>
+
+
+        <p>
+          When your work is ready, publish your evidence
+          and return here to complete your mission.
+        </p>
+
+
+        <p>
+          <strong>
+            One mission. One hour. One piece of evidence.
+          </strong>
+        </p>
+
+      </section>
+
+    </main>
+
+  `;
+
+
+  document.querySelector('#logout').onclick =
+    () => signOut(auth);
+
+}
+
+
+// ======================================================
+// LOAD MISSION
+// ======================================================
+
+async function showMission(user) {
+
   try {
 
-    /* -----------------------------------------------------
-       FIND STUDENT IN FIRESTORE
-    ----------------------------------------------------- */
+    const email =
+      user.email
+        .trim()
+        .toLowerCase();
 
-    const studentQuery = query(
 
-      collection(
-        db,
-        'mission_users'
-      ),
+    // --------------------------------------------------
+    // FIND THE LEARNER
+    // --------------------------------------------------
 
-      where(
-        'authEmail',
-        '==',
-        email
-      )
-
+    const userQuery = query(
+      collection(db, 'mission_users'),
+      where('authEmail', '==', email)
     );
 
 
-    const snapshot =
-      await getDocs(studentQuery);
+    const userSnapshot =
+      await getDocs(userQuery);
 
 
-    /* -----------------------------------------------------
-       NO MATCHING MISSION RECORD
-    ----------------------------------------------------- */
+    if (userSnapshot.empty) {
 
-    if (snapshot.empty) {
-
-      root.innerHTML = `
-
-        <main class="mission-dashboard">
-
-          <header>
-
-            <div>
-              SARLAYASH MISSION
-            </div>
-
-            <button id="logout">
-              SIGN OUT
-            </button>
-
-          </header>
-
-
-          <section>
-
-            <p class="eyebrow">
-              MISSION CONTROL
-            </p>
-
-            <h1>
-              Mission Record
-              <em>Not Found.</em>
-            </h1>
-
-            <p>
-              ${email}
-            </p>
-
-            <p>
-              Your login is valid, but no Mission record
-              is currently connected to this account.
-            </p>
-
-          </section>
-
-        </main>
-
-      `;
-
-
-      document
-        .querySelector('#logout')
-        .onclick =
-          () => signOut(auth);
-
+      showError(
+        'Mission record not found.'
+      );
 
       return;
 
     }
 
 
-    /* -----------------------------------------------------
-       STUDENT RECORD
-    ----------------------------------------------------- */
-
     const student =
-      snapshot.docs[0].data();
+      userSnapshot.docs[0].data();
 
 
-    const name =
-      student.name || 'Mission Member';
+    // --------------------------------------------------
+    // FIND RELEASED ASSIGNMENT
+    // --------------------------------------------------
+
+    const assignmentQuery = query(
+      collection(db, 'mission_assignments'),
+      where(
+        'journeyId',
+        '==',
+        student.journeyId
+      )
+    );
 
 
-    const journeyId =
-      student.journeyId || 'Not Assigned';
+    const assignmentSnapshot =
+      await getDocs(assignmentQuery);
 
 
-    const course =
-      student.course || 'Not Assigned';
+    if (assignmentSnapshot.empty) {
+
+      showWaiting(student);
+
+      return;
+
+    }
 
 
-    const month =
-      student.month ?? 1;
+    // --------------------------------------------------
+    // FIND CURRENT UNFINISHED RELEASED MISSION
+    // --------------------------------------------------
+
+    const assignments =
+      assignmentSnapshot.docs
+        .map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        .filter(assignment =>
+          assignment.status === 'RELEASED' &&
+          assignment.submitted !== true
+        )
+        .sort(
+          (a, b) =>
+            Number(a.hour) - Number(b.hour)
+        );
 
 
-    const status =
-      student.status || 'ACTIVE';
+    if (assignments.length === 0) {
+
+      showWaiting(student);
+
+      return;
+
+    }
 
 
-    const completedHours =
-      student.completedHours ?? 0;
+    // Learner sees ONLY the first
+    // currently available mission.
+
+    const currentMission =
+      assignments[0];
 
 
-    const totalHours =
-      student.totalHours ?? 0;
+    showActiveMission(
+      student,
+      currentMission
+    );
 
 
-    /* -----------------------------------------------------
-       STUDENT DASHBOARD
-    ----------------------------------------------------- */
-
-    root.innerHTML = `
-
-      <main class="mission-dashboard">
-
-        <header>
-
-          <div>
-            SARLAYASH MISSION
-          </div>
-
-          <button id="logout">
-            SIGN OUT
-          </button>
-
-        </header>
-
-
-        <section>
-
-          <p class="eyebrow">
-            MISSION CONTROL
-          </p>
-
-
-          <h1>
-            Welcome,
-            <em>${name}</em>
-          </h1>
-
-
-          <p>
-            Your SarlaYash Mission is now active.
-          </p>
-
-
-          <div class="mission-profile">
-
-            <p>
-              <strong>Journey ID:</strong>
-              ${journeyId}
-            </p>
-
-            <p>
-              <strong>Email:</strong>
-              ${email}
-            </p>
-
-            <p>
-              <strong>Course:</strong>
-              ${course}
-            </p>
-
-            <p>
-              <strong>Month:</strong>
-              ${month}
-            </p>
-
-            <p>
-              <strong>Status:</strong>
-              ${status}
-            </p>
-
-            <p>
-              <strong>Completed Hours:</strong>
-              ${completedHours}
-            </p>
-
-            <p>
-              <strong>Total Hours:</strong>
-              ${totalHours}
-            </p>
-
-          </div>
-
-
-          <p>
-            Your Month ${String(month).padStart(2, '0')}
-            journey will appear here.
-          </p>
-
-        </section>
-
-      </main>
-
-    `;
-
-
-    document
-      .querySelector('#logout')
-      .onclick =
-        () => signOut(auth);
-
-  }
-
-
-  /* =======================================================
-     FIRESTORE ERROR
-  ======================================================= */
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
       'Mission Loading Error:',
@@ -439,49 +501,18 @@ async function showMission(user) {
     );
 
 
-    root.innerHTML = `
-
-      <main class="mission-dashboard">
-
-        <section>
-
-          <p class="eyebrow">
-            MISSION CONTROL
-          </p>
-
-          <h1>
-            Unable to Load
-            <em>Mission.</em>
-          </h1>
-
-          <p>
-            Please try again.
-          </p>
-
-          <button id="logout">
-            SIGN OUT
-          </button>
-
-        </section>
-
-      </main>
-
-    `;
-
-
-    document
-      .querySelector('#logout')
-      .onclick =
-        () => signOut(auth);
+    showError(
+      'Please try again.'
+    );
 
   }
 
 }
 
 
-/* =========================================================
-   AUTHENTICATION STATE
-========================================================= */
+// ======================================================
+// AUTHENTICATION STATE
+// ======================================================
 
 onAuthStateChanged(
   auth,
@@ -491,9 +522,7 @@ onAuthStateChanged(
 
       showMission(user);
 
-    }
-
-    else {
+    } else {
 
       showLogin();
 
