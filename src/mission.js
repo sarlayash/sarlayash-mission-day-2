@@ -10,7 +10,10 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  doc,
+  updateDoc,
+  serverTimestamp
 } from 'firebase/firestore';
 
 
@@ -252,6 +255,107 @@ function showWaiting(student) {
 
 
 // ======================================================
+// SUBMITTED / REVIEW SCREEN
+// ======================================================
+
+function showSubmitted(student, assignment) {
+
+  root.innerHTML = `
+
+    <main class="mission-dashboard">
+
+      <header>
+
+        <div>
+          SARLAYASH MISSION
+        </div>
+
+        <button id="logout">
+          SIGN OUT
+        </button>
+
+      </header>
+
+
+      <section>
+
+        <p class="eyebrow">
+          MISSION CONTROL · HOUR ${String(assignment.hour).padStart(2, '0')}
+        </p>
+
+
+        <h1>
+          Evidence
+          <em>Received.</em>
+        </h1>
+
+
+        <p>
+          ${student.name}, your Hour ${assignment.hour}
+          evidence has been submitted successfully.
+        </p>
+
+
+        <p>
+          <strong>Journey ID:</strong>
+          ${student.journeyId}
+        </p>
+
+
+        <p>
+          <strong>Mission:</strong>
+          ${assignment.theme}
+        </p>
+
+
+        <p>
+          <strong>Mission Status:</strong>
+          SUBMITTED
+        </p>
+
+
+        <p>
+          <strong>Review Status:</strong>
+          PENDING
+        </p>
+
+
+        <hr>
+
+
+        <p>
+          Your evidence is now awaiting review.
+        </p>
+
+
+        <p>
+          Your next mission will remain locked
+          until the current mission is reviewed
+          and progression is approved.
+        </p>
+
+
+        <p>
+          <strong>
+            Submission does not mean progression.
+            Evidence must stand up to review.
+          </strong>
+        </p>
+
+      </section>
+
+    </main>
+
+  `;
+
+
+  document.querySelector('#logout').onclick =
+    () => signOut(auth);
+
+}
+
+
+// ======================================================
 // ACTIVE MISSION SCREEN
 // ======================================================
 
@@ -368,6 +472,60 @@ function showActiveMission(student, assignment) {
           </strong>
         </p>
 
+
+        <hr>
+
+
+        <div class="evidence-section">
+
+          <p class="eyebrow">
+            SUBMIT YOUR EVIDENCE
+          </p>
+
+
+          <h2>
+            Complete Hour ${String(assignment.hour).padStart(2, '0')}
+          </h2>
+
+
+          <p>
+            Publish your completed work on LinkedIn
+            and paste the public LinkedIn post URL below.
+          </p>
+
+
+          <form id="evidence-form">
+
+            <label>
+
+              LINKEDIN EVIDENCE URL
+
+              <input
+                type="url"
+                name="evidenceUrl"
+                id="evidence-url"
+                placeholder="https://www.linkedin.com/posts/..."
+                autocomplete="off"
+                required
+              >
+
+            </label>
+
+
+            <button
+              type="submit"
+              id="submit-evidence"
+            >
+              SUBMIT HOUR ${String(assignment.hour).padStart(2, '0')} →
+            </button>
+
+          </form>
+
+
+          <p id="evidence-message"></p>
+
+        </div>
+
       </section>
 
     </main>
@@ -377,6 +535,189 @@ function showActiveMission(student, assignment) {
 
   document.querySelector('#logout').onclick =
     () => signOut(auth);
+
+
+  // ====================================================
+  // EVIDENCE SUBMISSION
+  // ====================================================
+
+  const evidenceForm =
+    document.querySelector('#evidence-form');
+
+
+  evidenceForm.onsubmit =
+    async (event) => {
+
+      event.preventDefault();
+
+
+      const evidenceInput =
+        document.querySelector('#evidence-url');
+
+
+      const message =
+        document.querySelector('#evidence-message');
+
+
+      const submitButton =
+        document.querySelector('#submit-evidence');
+
+
+      const evidenceUrl =
+        evidenceInput.value.trim();
+
+
+      // --------------------------------------------------
+      // BASIC URL VALIDATION
+      // --------------------------------------------------
+
+      if (!evidenceUrl) {
+
+        message.textContent =
+          'Please enter your LinkedIn evidence URL.';
+
+        return;
+
+      }
+
+
+      let parsedUrl;
+
+
+      try {
+
+        parsedUrl =
+          new URL(evidenceUrl);
+
+      } catch (error) {
+
+        message.textContent =
+          'Please enter a valid URL.';
+
+        return;
+
+      }
+
+
+      const hostname =
+        parsedUrl.hostname
+          .toLowerCase()
+          .replace(/^www\./, '');
+
+
+      if (
+        hostname !== 'linkedin.com' &&
+        !hostname.endsWith('.linkedin.com')
+      ) {
+
+        message.textContent =
+          'Evidence must be a LinkedIn URL.';
+
+        return;
+
+      }
+
+
+      // --------------------------------------------------
+      // PREVENT DOUBLE CLICK
+      // --------------------------------------------------
+
+      submitButton.disabled = true;
+
+      evidenceInput.disabled = true;
+
+      submitButton.textContent =
+        'SUBMITTING EVIDENCE...';
+
+      message.textContent =
+        'Recording your Hour ' +
+        assignment.hour +
+        ' evidence...';
+
+
+      try {
+
+        // ------------------------------------------------
+        // UPDATE EXACT FIRESTORE ASSIGNMENT
+        // ------------------------------------------------
+
+        const assignmentReference =
+          doc(
+            db,
+            'mission_assignments',
+            assignment.id
+          );
+
+
+        await updateDoc(
+          assignmentReference,
+          {
+
+            evidenceUrl: evidenceUrl,
+
+            submitted: true,
+
+            submittedAt: serverTimestamp(),
+
+            status: 'SUBMITTED',
+
+            reviewStatus: 'PENDING'
+
+          }
+        );
+
+
+        // ------------------------------------------------
+        // LOCAL OBJECT UPDATE
+        // ------------------------------------------------
+
+        assignment.evidenceUrl =
+          evidenceUrl;
+
+        assignment.submitted =
+          true;
+
+        assignment.status =
+          'SUBMITTED';
+
+        assignment.reviewStatus =
+          'PENDING';
+
+
+        // ------------------------------------------------
+        // SHOW CONFIRMATION
+        // ------------------------------------------------
+
+        showSubmitted(
+          student,
+          assignment
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          'Evidence Submission Error:',
+          error
+        );
+
+
+        evidenceInput.disabled = false;
+
+        submitButton.disabled = false;
+
+        submitButton.textContent =
+          'SUBMIT HOUR ' +
+          String(assignment.hour).padStart(2, '0') +
+          ' →';
+
+
+        message.textContent =
+          'Unable to submit evidence. Please try again.';
+
+      }
+
+    };
 
 }
 
@@ -401,7 +742,11 @@ async function showMission(user) {
 
     const userQuery = query(
       collection(db, 'mission_users'),
-      where('authEmail', '==', email)
+      where(
+        'authEmail',
+        '==',
+        email
+      )
     );
 
 
@@ -425,7 +770,7 @@ async function showMission(user) {
 
 
     // --------------------------------------------------
-    // FIND RELEASED ASSIGNMENT
+    // FIND LEARNER ASSIGNMENTS
     // --------------------------------------------------
 
     const assignmentQuery = query(
@@ -452,26 +797,61 @@ async function showMission(user) {
 
 
     // --------------------------------------------------
-    // FIND CURRENT UNFINISHED RELEASED MISSION
+    // NORMALIZE ASSIGNMENTS
     // --------------------------------------------------
 
-    const assignments =
+    const allAssignments =
       assignmentSnapshot.docs
-        .map(doc => ({
-          id: doc.id,
-          ...doc.data()
+        .map(documentSnapshot => ({
+
+          id: documentSnapshot.id,
+
+          ...documentSnapshot.data()
+
         }))
-        .filter(assignment =>
-          assignment.status === 'RELEASED' &&
-          assignment.submitted !== true
-        )
         .sort(
           (a, b) =>
             Number(a.hour) - Number(b.hour)
         );
 
 
-    if (assignments.length === 0) {
+    // --------------------------------------------------
+    // CHECK FOR SUBMITTED MISSION AWAITING REVIEW
+    // --------------------------------------------------
+
+    const submittedMission =
+      allAssignments.find(
+        assignment =>
+          assignment.status === 'SUBMITTED' ||
+          assignment.submitted === true
+      );
+
+
+    if (submittedMission) {
+
+      showSubmitted(
+        student,
+        submittedMission
+      );
+
+      return;
+
+    }
+
+
+    // --------------------------------------------------
+    // FIND CURRENT UNFINISHED RELEASED MISSION
+    // --------------------------------------------------
+
+    const availableAssignments =
+      allAssignments.filter(
+        assignment =>
+          assignment.status === 'RELEASED' &&
+          assignment.submitted !== true
+      );
+
+
+    if (availableAssignments.length === 0) {
 
       showWaiting(student);
 
@@ -480,11 +860,12 @@ async function showMission(user) {
     }
 
 
-    // Learner sees ONLY the first
-    // currently available mission.
+    // --------------------------------------------------
+    // SHOW ONLY FIRST AVAILABLE MISSION
+    // --------------------------------------------------
 
     const currentMission =
-      assignments[0];
+      availableAssignments[0];
 
 
     showActiveMission(
