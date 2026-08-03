@@ -352,3 +352,162 @@
     padding: 25px 18px 60px;
   }
 }
+
+/* =========================================================
+   MISSION LOGIN — FINAL RESPONSIVE FIX
+   ========================================================= */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#mission-app {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Override inherited layout rules from styles.css */
+
+#mission-app .mission-login {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 24px;
+  margin: 0;
+}
+
+#mission-app .mission-login-box {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+#mission-app .mission-brand {
+  width: 100%;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#mission-app .mission-login h1 {
+  width: 100%;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+#mission-app .mission-form {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+#mission-app .mission-form input {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Style whatever submit button mission.js currently creates */
+
+#mission-app .mission-form button,
+#mission-app .mission-form button[type="submit"] {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-top: 8px;
+  padding: 16px 20px;
+
+  border: 1px solid #d4af37;
+  background: #d4af37;
+  color: #080808;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+#mission-app .mission-form button:hover,
+#mission-app .mission-form button[type="submit"]:hover {
+  background: transparent;
+  color: #d4af37;
+}
+
+/* Tablet */
+
+@media (max-width: 800px) {
+
+  #mission-app .mission-login {
+    padding: 50px 24px;
+  }
+
+  #mission-app .mission-login-box {
+    max-width: 560px;
+  }
+
+  #mission-app .mission-login h1 {
+    font-size: clamp(44px, 10vw, 64px);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+
+  #mission-app .mission-login {
+    min-height: 100svh;
+    justify-content: center;
+    padding: 35px 18px;
+  }
+
+  #mission-app .mission-login-box,
+  #mission-app .mission-brand {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #mission-app .mission-brand {
+    margin-bottom: 28px;
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  #mission-app .mission-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  #mission-app .mission-login h1 {
+    font-size: clamp(40px, 13vw, 54px);
+    line-height: 1;
+  }
+
+  #mission-app .mission-description {
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+
+  #mission-app .mission-form {
+    padding: 20px 16px;
+  }
+}
