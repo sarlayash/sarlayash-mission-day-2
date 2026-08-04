@@ -1,6 +1,4 @@
-import {
-  db
-} from './firebase.js';
+import { db } from './firebase.js';
 
 import {
   collection,
@@ -12,6 +10,13 @@ import {
 
 
 // ======================================================
+// SARLAYASH MISSION COMMAND CENTRE
+// Day 3 · Hours 01–16
+// Clean replacement for src/mission-admin.js
+// ======================================================
+
+
+// ======================================================
 // STATE
 // ======================================================
 
@@ -19,6 +24,46 @@ let root = null;
 let learners = [];
 let assignments = [];
 let currentAdmin = null;
+
+
+// ======================================================
+// HOUR CATALOGUE
+//
+// Hour 01 is preserved from the existing live system.
+// Hour 02 is the next mission requested for the programme.
+// Hours 03–16 intentionally remain configurable. The
+// Command Centre can visualize them without inventing
+// curriculum content.
+// ======================================================
+
+const HOUR_CATALOGUE = {
+
+  1: {
+    theme:
+      'Code of Business Conduct — The Code You Would Be Willing to Live By',
+
+    deliverable:
+      'Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.',
+
+    outcome:
+      'Policy Reader → Policy Thinker'
+  },
+
+  2: {
+    theme:
+      'Code of Operations & Conduct',
+
+    deliverable:
+      'Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, explain one workplace situation showing what the principle means in action.',
+
+    outcome:
+      'Task Participant → Responsible Operator'
+  }
+
+};
+
+
+const TOTAL_HOURS = 16;
 
 
 // ======================================================
@@ -48,19 +93,23 @@ function formatDate(value) {
   try {
 
     if (typeof value.toDate === 'function') {
-      return value
-        .toDate()
-        .toLocaleString();
+      return value.toDate().toLocaleString();
     }
 
-    return new Date(value)
-      .toLocaleString();
+    return new Date(value).toLocaleString();
 
   } catch {
-
     return '—';
-
   }
+
+}
+
+
+function hourLabel(hour) {
+
+  return String(
+    Number(hour || 0)
+  ).padStart(2, '0');
 
 }
 
@@ -72,21 +121,21 @@ function statusLabel(assignment) {
   }
 
   if (
-    assignment.reviewStatus ===
-    'APPROVED'
+    assignment.reviewStatus === 'APPROVED' ||
+    assignment.status === 'APPROVED'
   ) {
     return 'APPROVED';
   }
 
   if (
-    assignment.reviewStatus ===
-    'REVISION_REQUIRED'
+    assignment.reviewStatus === 'REVISION_REQUIRED'
   ) {
     return 'REVISION REQUIRED';
   }
 
   if (
     assignment.status === 'SUBMITTED' &&
+    assignment.submitted === true &&
     assignment.reviewStatus === 'PENDING'
   ) {
     return 'AWAITING REVIEW';
@@ -98,25 +147,313 @@ function statusLabel(assignment) {
     return 'RELEASED';
   }
 
-  return (
-    assignment.status ||
-    'UNKNOWN'
-  );
+  return assignment.status || 'UNKNOWN';
 
 }
 
 
 function statusClass(status) {
 
-  return String(status)
+  return String(status || '')
     .toLowerCase()
     .replaceAll(' ', '-');
 
 }
 
 
+function assignmentForHour(
+  journeyId,
+  hour
+) {
+
+  return assignments.find(
+    assignment =>
+      assignment.journeyId === journeyId &&
+      Number(assignment.hour) === Number(hour)
+  ) || null;
+
+}
+
+
+function assignmentsForLearner(
+  journeyId
+) {
+
+  return assignments
+    .filter(
+      assignment =>
+        assignment.journeyId === journeyId
+    )
+    .sort(
+      (a, b) =>
+        Number(a.hour || 0) -
+        Number(b.hour || 0)
+    );
+
+}
+
+
+function getCurrentAssignment(
+  journeyId
+) {
+
+  const learnerAssignments =
+    assignmentsForLearner(journeyId);
+
+  if (!learnerAssignments.length) {
+    return null;
+  }
+
+
+  const pending =
+    learnerAssignments.find(
+      assignment =>
+        assignment.status === 'SUBMITTED' &&
+        assignment.submitted === true &&
+        assignment.reviewStatus === 'PENDING'
+    );
+
+  if (pending) {
+    return pending;
+  }
+
+
+  const revision =
+    learnerAssignments.find(
+      assignment =>
+        assignment.status === 'RELEASED' &&
+        assignment.reviewStatus === 'REVISION_REQUIRED'
+    );
+
+  if (revision) {
+    return revision;
+  }
+
+
+  const released =
+    learnerAssignments.find(
+      assignment =>
+        assignment.status === 'RELEASED' &&
+        assignment.submitted !== true
+    );
+
+  if (released) {
+    return released;
+  }
+
+
+  return [...learnerAssignments]
+    .sort(
+      (a, b) =>
+        Number(b.hour || 0) -
+        Number(a.hour || 0)
+    )[0];
+
+}
+
+
+function approvedHours(
+  journeyId
+) {
+
+  return assignmentsForLearner(journeyId)
+    .filter(
+      assignment =>
+        statusLabel(assignment) === 'APPROVED'
+    )
+    .map(
+      assignment =>
+        Number(assignment.hour || 0)
+    );
+
+}
+
+
+function completedCount(
+  learner
+) {
+
+  const fromAssignments =
+    approvedHours(
+      learner.journeyId
+    ).length;
+
+  const fromLearner =
+    Number(
+      learner.completedHours || 0
+    );
+
+  return Math.max(
+    fromAssignments,
+    fromLearner
+  );
+
+}
+
+
+function nextHourNumber(
+  learner
+) {
+
+  const completed =
+    completedCount(learner);
+
+  if (completed >= TOTAL_HOURS) {
+    return null;
+  }
+
+  return completed + 1;
+
+}
+
+
+function canReleaseHour(
+  learner,
+  hour
+) {
+
+  const numericHour =
+    Number(hour);
+
+  if (
+    numericHour < 1 ||
+    numericHour > TOTAL_HOURS
+  ) {
+    return false;
+  }
+
+
+  if (
+    assignmentForHour(
+      learner.journeyId,
+      numericHour
+    )
+  ) {
+    return false;
+  }
+
+
+  if (numericHour === 1) {
+    return true;
+  }
+
+
+  const previous =
+    assignmentForHour(
+      learner.journeyId,
+      numericHour - 1
+    );
+
+
+  return Boolean(
+    previous &&
+    statusLabel(previous) === 'APPROVED'
+  );
+
+}
+
+
+function hourVisual(
+  learner,
+  hour
+) {
+
+  const assignment =
+    assignmentForHour(
+      learner.journeyId,
+      hour
+    );
+
+
+  if (!assignment) {
+
+    const releaseable =
+      canReleaseHour(
+        learner,
+        hour
+      );
+
+    return {
+      symbol:
+        releaseable ? '+' : '🔒',
+
+      title:
+        releaseable
+          ? `Hour ${hourLabel(hour)} ready for Super Admin release`
+          : `Hour ${hourLabel(hour)} locked`,
+
+      className:
+        releaseable
+          ? 'hour-ready'
+          : 'hour-locked'
+    };
+
+  }
+
+
+  const status =
+    statusLabel(
+      assignment
+    );
+
+
+  if (status === 'APPROVED') {
+    return {
+      symbol: '✓',
+      title:
+        `Hour ${hourLabel(hour)} approved`,
+      className:
+        'hour-approved'
+    };
+  }
+
+
+  if (status === 'AWAITING REVIEW') {
+    return {
+      symbol: '!',
+      title:
+        `Hour ${hourLabel(hour)} awaiting review`,
+      className:
+        'hour-review'
+    };
+  }
+
+
+  if (status === 'REVISION REQUIRED') {
+    return {
+      symbol: '↻',
+      title:
+        `Hour ${hourLabel(hour)} revision required`,
+      className:
+        'hour-revision'
+    };
+  }
+
+
+  if (status === 'RELEASED') {
+    return {
+      symbol: '●',
+      title:
+        `Hour ${hourLabel(hour)} released`,
+      className:
+        'hour-released'
+    };
+  }
+
+
+  return {
+    symbol: '•',
+    title:
+      `Hour ${hourLabel(hour)} · ${status}`,
+    className:
+      'hour-other'
+  };
+
+}
+
+
 // ======================================================
-// LOAD MISSION DATA
+// LOAD DATA
 // ======================================================
 
 async function loadMissionData() {
@@ -145,10 +482,12 @@ async function loadMissionData() {
 
   learners =
     learnerSnapshot.docs
-      .map(snapshot => ({
-        id: snapshot.id,
-        ...snapshot.data()
-      }))
+      .map(
+        snapshot => ({
+          id: snapshot.id,
+          ...snapshot.data()
+        })
+      )
       .sort(
         (a, b) =>
           String(a.name || '')
@@ -160,46 +499,18 @@ async function loadMissionData() {
 
   assignments =
     assignmentSnapshot.docs
-      .map(snapshot => ({
-        id: snapshot.id,
-        ...snapshot.data()
-      }));
-
-}
-
-
-// ======================================================
-// FIND CURRENT ASSIGNMENT
-// ======================================================
-
-function getCurrentAssignment(
-  journeyId
-) {
-
-  const learnerAssignments =
-    assignments
-      .filter(
-        assignment =>
-          assignment.journeyId ===
-          journeyId
-      )
-      .sort(
-        (a, b) =>
-          Number(b.hour || 0) -
-          Number(a.hour || 0)
+      .map(
+        snapshot => ({
+          id: snapshot.id,
+          ...snapshot.data()
+        })
       );
 
-
-  return (
-    learnerAssignments[0] ||
-    null
-  );
-
 }
 
 
 // ======================================================
-// MISSION CONTROL ENTRY
+// ENTRY
 // ======================================================
 
 export async function showMissionControl(
@@ -211,52 +522,57 @@ export async function showMissionControl(
   currentAdmin = adminUser;
 
 
-  root.innerHTML =
-    `
-      <section class="review-page">
+  root.innerHTML = `
 
-        <button
-          class="ghost"
-          id="mission-super-home"
-        >
-          ← SUPER ADMIN
-        </button>
+    <section class="review-page">
 
-
-        <p
-          class="eyebrow"
-          style="margin-top:30px"
-        >
-          ADMINISTRATOR CONTROL PLANE
-        </p>
+      <button
+        class="ghost"
+        id="mission-super-home"
+      >
+        ← SUPER ADMIN
+      </button>
 
 
-        <h2>
-          Mission <em>Control.</em>
-        </h2>
+      <p
+        class="eyebrow"
+        style="margin-top:30px"
+      >
+        SARLAYASH · ADMINISTRATOR CONTROL PLANE
+      </p>
 
 
-        <p class="intro">
-          Day 3 · Hours 01–16.
-          Evidence-led progression.
-          Every Mission remains individually
-          reviewable, auditable and gated.
-        </p>
+      <h2>
+        Mission
+        <em>Command Centre.</em>
+      </h2>
 
 
-        <div id="mission-board">
-          Loading Mission intelligence…
-        </div>
+      <p class="intro">
+        Day 3 · Hours 01–16.
+        Human-controlled progression.
+        Evidence-led review.
+        Every Hour remains individually
+        auditable, gated and releasable only
+        through Mission Control.
+      </p>
 
-      </section>
-    `;
+
+      <div id="mission-board">
+        Loading Mission intelligence…
+      </div>
+
+    </section>
+
+  `;
 
 
   document
     .querySelector(
       '#mission-super-home'
     )
-    .onclick = goSuperAdmin;
+    .onclick =
+      goSuperAdmin;
 
 
   try {
@@ -278,14 +594,15 @@ export async function showMissionControl(
 
     if (board) {
 
-      board.innerHTML =
-        `
-          <p class="quiet">
-            Unable to load Mission data.
-            Check Firestore permissions
-            and try again.
-          </p>
-        `;
+      board.innerHTML = `
+
+        <p class="quiet">
+          Unable to load Mission data.
+          Check Firestore permissions
+          and try again.
+        </p>
+
+      `;
 
     }
 
@@ -310,78 +627,70 @@ function goSuperAdmin() {
 
 
 // ======================================================
-// DRAW DASHBOARD
+// DASHBOARD
 // ======================================================
 
 function drawDashboard() {
 
-  const missionRows =
-    learners.map(learner => {
+  const rows =
+    learners.map(
+      learner => {
 
-      const assignment =
-        getCurrentAssignment(
-          learner.journeyId
-        );
+        const current =
+          getCurrentAssignment(
+            learner.journeyId
+          );
 
 
-      return {
+        return {
+          learner,
+          current,
+          status:
+            statusLabel(current),
+          completed:
+            completedCount(learner)
+        };
 
-        learner,
-
-        assignment,
-
-        status:
-          statusLabel(
-            assignment
-          )
-
-      };
-
-    });
+      }
+    );
 
 
   const awaitingReview =
-    missionRows.filter(
+    rows.filter(
       row =>
         row.status ===
         'AWAITING REVIEW'
     ).length;
 
 
-  const approved =
-    missionRows.filter(
+  const active =
+    rows.filter(
       row =>
         row.status ===
-        'APPROVED'
+          'RELEASED' ||
+        row.status ===
+          'REVISION REQUIRED'
     ).length;
 
 
-  const revisionRequired =
-    missionRows.filter(
+  const revisions =
+    rows.filter(
       row =>
         row.status ===
         'REVISION REQUIRED'
     ).length;
 
 
-  const released =
-    missionRows.filter(
+  const graduates =
+    rows.filter(
       row =>
-        row.status ===
-        'RELEASED'
-    ).length;
-
-
-  const notReleased =
-    missionRows.filter(
-      row =>
-        row.status ===
-        'NOT RELEASED'
+        row.completed >=
+        TOTAL_HOURS
     ).length;
 
 
   const tableRows =
-    missionRows
+    rows
       .map(
         (row, index) => {
 
@@ -389,11 +698,67 @@ function drawDashboard() {
             row.learner;
 
 
-          const assignment =
-            row.assignment;
+          const hourCells =
+            Array.from(
+              {
+                length:
+                  TOTAL_HOURS
+              },
+              (_, position) => {
+
+                const hour =
+                  position + 1;
+
+
+                const visual =
+                  hourVisual(
+                    learner,
+                    hour
+                  );
+
+
+                return `
+
+                  <td
+                    title="${esc(
+                      visual.title
+                    )}"
+                    style="
+                      text-align:center;
+                      min-width:38px;
+                    "
+                  >
+
+                    <span
+                      class="${esc(
+                        visual.className
+                      )}"
+                      style="
+                        display:inline-flex;
+                        width:28px;
+                        height:28px;
+                        align-items:center;
+                        justify-content:center;
+                        border:1px solid rgba(214,177,61,.25);
+                        border-radius:50%;
+                      "
+                    >
+                      ${esc(
+                        visual.symbol
+                      )}
+                    </span>
+
+                  </td>
+
+                `;
+
+              }
+            )
+              .join('');
 
 
           return `
+
             <tr
               data-search="${esc(
                 [
@@ -408,7 +773,15 @@ function drawDashboard() {
               )}"
             >
 
-              <td>
+              <td
+                style="
+                  position:sticky;
+                  left:0;
+                  background:#080806;
+                  z-index:2;
+                  min-width:220px;
+                "
+              >
 
                 <b>
                   ${esc(
@@ -427,51 +800,13 @@ function drawDashboard() {
               </td>
 
 
-              <td>
-                ${esc(
-                  learner.journeyId
-                )}
-              </td>
+              ${hourCells}
 
 
               <td>
-                ${esc(
-                  learner.course ||
-                  '—'
-                )}
-              </td>
-
-
-              <td>
-
-                ${
-                  assignment
-                    ? String(
-                        assignment.hour
-                      ).padStart(
-                        2,
-                        '0'
-                      )
-                    : '—'
-                }
-
-              </td>
-
-
-              <td>
-
-                ${esc(
-                  learner.completedHours ??
-                  0
-                )}
-
-                /
-
-                ${esc(
-                  learner.totalHours ??
-                  16
-                )}
-
+                <b>
+                  ${row.completed}/${TOTAL_HOURS}
+                </b>
               </td>
 
 
@@ -496,12 +831,13 @@ function drawDashboard() {
                   class="ghost mission-open"
                   data-index="${index}"
                 >
-                  REVIEW →
+                  CONTROL →
                 </button>
 
               </td>
 
             </tr>
+
           `;
 
         }
@@ -520,272 +856,252 @@ function drawDashboard() {
   }
 
 
-  board.innerHTML =
-    `
+  board.innerHTML = `
 
-      <div class="metrics">
+    <div class="metrics">
 
-        <article>
+      <article>
 
-          <small>
-            MISSION LEARNERS
-          </small>
+        <small>
+          MISSION LEARNERS
+        </small>
 
-          <b>
-            ${learners.length}
-          </b>
+        <b>
+          ${learners.length}
+        </b>
 
-        </article>
+      </article>
 
 
-        <article>
+      <article>
 
-          <small>
-            AWAITING REVIEW
-          </small>
+        <small>
+          ACTIVE MISSIONS
+        </small>
 
-          <b>
-            ${awaitingReview}
-          </b>
+        <b>
+          ${active}
+        </b>
 
-        </article>
+      </article>
 
 
-        <article>
+      <article>
 
-          <small>
-            APPROVED
-          </small>
+        <small>
+          AWAITING REVIEW
+        </small>
 
-          <b>
-            ${approved}
-          </b>
+        <b>
+          ${awaitingReview}
+        </b>
 
-        </article>
+      </article>
 
 
-        <article>
+      <article>
 
-          <small>
-            REVISION REQUIRED
-          </small>
+        <small>
+          REVISION REQUIRED
+        </small>
 
-          <b>
-            ${revisionRequired}
-          </b>
+        <b>
+          ${revisions}
+        </b>
 
-        </article>
+      </article>
 
-      </div>
 
+      <article>
 
-      <div class="toolbar">
+        <small>
+          16/16 GRADUATES
+        </small>
 
-        <input
-          id="mission-search"
-          placeholder="Search learner, email, Journey ID, course or status…"
-        >
+        <b>
+          ${graduates}
+        </b>
 
+      </article>
 
-        <button
-          class="ghost"
-          id="mission-refresh"
-        >
-          REFRESH
-        </button>
+    </div>
 
 
-        <button
-          class="ghost"
-          id="mission-csv"
-        >
-          DOWNLOAD CSV
-        </button>
+    <div class="toolbar">
 
-      </div>
+      <input
+        id="mission-search"
+        placeholder="Search learner, email, Journey ID, course or status…"
+      >
 
 
-      <h3 class="section-title">
-        DAY 3 · MISSION PIPELINE
-      </h3>
+      <button
+        class="ghost"
+        id="mission-refresh"
+      >
+        REFRESH
+      </button>
 
 
-      <div class="signals">
+      <button
+        class="ghost"
+        id="mission-csv"
+      >
+        DOWNLOAD CSV
+      </button>
 
-        <div class="signal">
+    </div>
 
-          <span>
-            Released
-          </span>
 
-          <b>
-            ${released}
-          </b>
+    <h3 class="section-title">
+      16-HOUR · PROGRESSION MATRIX
+    </h3>
 
-        </div>
 
-
-        <div class="signal">
-
-          <span>
-            Awaiting Review
-          </span>
-
-          <b>
-            ${awaitingReview}
-          </b>
-
-        </div>
-
-
-        <div class="signal">
-
-          <span>
-            Approved
-          </span>
-
-          <b>
-            ${approved}
-          </b>
-
-        </div>
-
-
-        <div class="signal">
-
-          <span>
-            Revision Required
-          </span>
-
-          <b>
-            ${revisionRequired}
-          </b>
-
-        </div>
-
-
-        <div class="signal">
-
-          <span>
-            Not Released
-          </span>
-
-          <b>
-            ${notReleased}
-          </b>
-
-        </div>
-
-      </div>
-
-
-      <h3 class="section-title">
-        DAY 3 LEARNERS
-      </h3>
-
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Learner
-              </th>
-
-              <th>
-                Journey ID
-              </th>
-
-              <th>
-                Course
-              </th>
-
-              <th>
-                Hour
-              </th>
-
-              <th>
-                Progress
-              </th>
-
-              <th>
-                Status
-              </th>
-
-              <th></th>
-
-            </tr>
-
-          </thead>
-
-
-          <tbody>
-
-            ${tableRows}
-
-          </tbody>
-
-        </table>
-
-      </div>
-    `;
+    <p class="quiet">
+      ✓ Approved · ● Released · ! Awaiting Review ·
+      ↻ Revision · + Ready for Admin Release · 🔒 Locked
+    </p>
+
+
+    <div
+      class="table-wrap"
+      style="
+        overflow-x:auto;
+        max-width:100%;
+      "
+    >
+
+      <table
+        style="
+          min-width:1250px;
+        "
+      >
+
+        <thead>
+
+          <tr>
+
+            <th
+              style="
+                position:sticky;
+                left:0;
+                background:#080806;
+                z-index:3;
+              "
+            >
+              Learner
+            </th>
+
+            ${
+              Array.from(
+                {
+                  length:
+                    TOTAL_HOURS
+                },
+                (_, position) => `
+
+                  <th
+                    style="
+                      text-align:center;
+                      min-width:38px;
+                    "
+                  >
+                    ${hourLabel(
+                      position + 1
+                    )}
+                  </th>
+
+                `
+              ).join('')
+            }
+
+            <th>
+              Progress
+            </th>
+
+            <th>
+              Current State
+            </th>
+
+            <th>
+              Control
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+          ${tableRows}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
 
 
   document
     .querySelectorAll(
       '.mission-open'
     )
-    .forEach(button => {
+    .forEach(
+      button => {
 
-      button.onclick = () => {
+        button.onclick =
+          () => {
 
-        const row =
-          missionRows[
-            Number(
-              button.dataset.index
-            )
-          ];
+            const row =
+              rows[
+                Number(
+                  button.dataset.index
+                )
+              ];
 
 
-        reviewMission(
-          row.learner,
-          row.assignment
-        );
+            openLearnerControl(
+              row.learner
+            );
 
-      };
+          };
 
-    });
+      }
+    );
 
 
   document
     .querySelector(
       '#mission-search'
     )
-    .oninput = event => {
+    .oninput =
+      event => {
 
-      const query =
-        event.target.value
-          .trim()
-          .toLowerCase();
+        const queryText =
+          event.target.value
+            .trim()
+            .toLowerCase();
 
 
-      document
-        .querySelectorAll(
-          '#mission-board tbody tr'
-        )
-        .forEach(row => {
+        document
+          .querySelectorAll(
+            '#mission-board tbody tr'
+          )
+          .forEach(
+            row => {
 
-          row.hidden =
-            !row.dataset.search
-              .includes(query);
+              row.hidden =
+                !row.dataset.search
+                  .includes(
+                    queryText
+                  );
 
-        });
+            }
+          );
 
-    };
+      };
 
 
   document
@@ -814,419 +1130,613 @@ function drawDashboard() {
 
 
 // ======================================================
-// REVIEW SCREEN
+// LEARNER CONTROL ROOM
 // ======================================================
 
-function reviewMission(
-  learner,
-  assignment
+function openLearnerControl(
+  learner
 ) {
 
-  const status =
-    statusLabel(
-      assignment
+  const learnerAssignments =
+    assignmentsForLearner(
+      learner.journeyId
     );
 
 
-  const canReview =
-    assignment &&
-    assignment.status ===
-      'SUBMITTED' &&
-    assignment.submitted ===
-      true &&
-    assignment.reviewStatus ===
-      'PENDING';
+  const completed =
+    completedCount(
+      learner
+    );
 
 
-  const evidence =
-    assignment?.evidenceUrl
-
-      ? `
-          <a
-            class="gold"
-            href="${esc(
-              assignment.evidenceUrl
-            )}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            OPEN LINKEDIN EVIDENCE ↗
-          </a>
-        `
-
-      : `
-          <p class="quiet">
-            No evidence submitted yet.
-          </p>
-        `;
+  const current =
+    getCurrentAssignment(
+      learner.journeyId
+    );
 
 
-  root.innerHTML =
-    `
-      <section class="review-page">
-
-        <button
-          class="ghost"
-          id="mission-back"
-        >
-          ← BACK TO MISSION CONTROL
-        </button>
+  const currentStatus =
+    statusLabel(
+      current
+    );
 
 
-        <p
-          class="eyebrow"
-          style="margin-top:30px"
-        >
-          INDIVIDUAL MISSION REVIEW
-        </p>
+  const nextHour =
+    nextHourNumber(
+      learner
+    );
 
 
-        <h2>
-
-          ${esc(
-            learner.name
-          )}
-
-          <em>
-            · ${esc(
-              learner.journeyId
-            )}
-          </em>
-
-        </h2>
+  const nextAssignment =
+    nextHour
+      ? assignmentForHour(
+          learner.journeyId,
+          nextHour
+        )
+      : null;
 
 
-        <div class="candidate">
-
-          <strong>
-            ${esc(
-              learner.authEmail
-            )}
-          </strong>
-
-
-          <span>
-            ${esc(
-              learner.course ||
-              '—'
-            )}
-          </span>
-
-        </div>
+  const nextDefinition =
+    nextHour
+      ? HOUR_CATALOGUE[
+          nextHour
+        ]
+      : null;
 
 
-        <h3 class="section-title">
-          MISSION INTELLIGENCE
-        </h3>
+  const canReleaseNext =
+    nextHour &&
+    !nextAssignment &&
+    canReleaseHour(
+      learner,
+      nextHour
+    ) &&
+    Boolean(
+      nextDefinition
+    );
 
 
-        <div class="intelligence">
+  const history =
+    Array.from(
+      {
+        length:
+          TOTAL_HOURS
+      },
+      (_, position) => {
 
-          <article>
+        const hour =
+          position + 1;
 
-            <small>
-              CURRENT HOUR
-            </small>
 
-            <b>
+        const assignment =
+          assignmentForHour(
+            learner.journeyId,
+            hour
+          );
 
+
+        const visual =
+          hourVisual(
+            learner,
+            hour
+          );
+
+
+        return `
+
+          <article class="review">
+
+            <span>
+              HOUR ${hourLabel(hour)}
+            </span>
+
+
+            <h3>
               ${
                 assignment
-                  ? String(
-                      assignment.hour
-                    ).padStart(
-                      2,
-                      '0'
+                  ? esc(
+                      assignment.theme ||
+                      `Mission Hour ${hourLabel(hour)}`
                     )
-                  : '—'
+                  : esc(
+                      HOUR_CATALOGUE[hour]?.theme ||
+                      'LOCKED'
+                    )
               }
-
-            </b>
-
-          </article>
+            </h3>
 
 
-          <article>
+            <p>
 
-            <small>
-              MISSION STATUS
-            </small>
-
-            <b>
-              ${esc(status)}
-            </b>
-
-          </article>
-
-
-          <article>
-
-            <small>
-              COMPLETED HOURS
-            </small>
-
-            <b>
+              <strong>
+                Status:
+              </strong>
 
               ${esc(
-                learner.completedHours ??
-                0
+                assignment
+                  ? statusLabel(
+                      assignment
+                    )
+                  : (
+                      canReleaseHour(
+                        learner,
+                        hour
+                      )
+                        ? 'READY FOR ADMIN RELEASE'
+                        : 'LOCKED'
+                    )
               )}
 
-              /
-
-              ${esc(
-                learner.totalHours ??
-                16
-              )}
-
-            </b>
-
-          </article>
-
-        </div>
+            </p>
 
 
-        <h3 class="section-title">
-          ASSIGNMENT
-        </h3>
-
-
-        ${
-          assignment
-
-            ? `
-                <article class="review">
-
-                  <span>
-
-                    HOUR ${String(
-                      assignment.hour
-                    ).padStart(
-                      2,
-                      '0'
-                    )}
-
-                  </span>
-
-
-                  <h3>
-                    ${esc(
-                      assignment.theme
-                    )}
-                  </h3>
-
-
-                  <p>
-                    ${esc(
-                      assignment.deliverable
-                    )}
-                  </p>
-
-
-                  <p>
-
-                    <strong>
-                      Transformation:
-                    </strong>
-
-                    ${esc(
-                      assignment.outcome
-                    )}
-
-                  </p>
-
-                </article>
-              `
-
-            : `
-                <p class="quiet">
-                  No Mission assignment
-                  exists for this learner.
-                </p>
-              `
-        }
-
-
-        <h3 class="section-title">
-          EVIDENCE
-        </h3>
-
-
-        <article class="review">
-
-          <span>
-            LINKEDIN EVIDENCE
-          </span>
-
-
-          ${evidence}
-
-
-          <p>
-
-            <strong>
-              Submitted:
-            </strong>
-
-            ${formatDate(
+            ${
               assignment?.submittedAt
-            )}
 
-          </p>
+                ? `
 
+                    <p>
+                      <strong>
+                        Submitted:
+                      </strong>
 
-          <p>
+                      ${formatDate(
+                        assignment.submittedAt
+                      )}
+                    </p>
 
-            <strong>
-              Review Status:
-            </strong>
+                  `
 
-            ${esc(
-              assignment?.reviewStatus ||
-              '—'
-            )}
-
-          </p>
-
-
-          ${
-            assignment?.reviewedAt
-
-              ? `
-                  <p>
-
-                    <strong>
-                      Last Reviewed:
-                    </strong>
-
-                    ${formatDate(
-                      assignment.reviewedAt
-                    )}
-
-                  </p>
-                `
-
-              : ''
-          }
+                : ''
+            }
 
 
-          ${
-            assignment?.reviewedBy
+            ${
+              assignment?.reviewedAt
 
-              ? `
-                  <p>
+                ? `
 
-                    <strong>
-                      Reviewed By:
-                    </strong>
+                    <p>
+                      <strong>
+                        Reviewed:
+                      </strong>
 
-                    ${esc(
-                      assignment.reviewedBy
-                    )}
+                      ${formatDate(
+                        assignment.reviewedAt
+                      )}
+                    </p>
 
-                  </p>
-                `
+                  `
 
-              : ''
-          }
+                : ''
+            }
 
 
-          ${
-            assignment?.reviewNotes
+            ${
+              assignment?.reviewedBy
 
-              ? `
-                  <p>
+                ? `
 
-                    <strong>
-                      Review Notes:
-                    </strong>
+                    <p>
+                      <strong>
+                        Reviewed By:
+                      </strong>
 
-                    ${esc(
-                      assignment.reviewNotes
-                    )}
+                      ${esc(
+                        assignment.reviewedBy
+                      )}
+                    </p>
 
-                  </p>
-                `
+                  `
 
-              : ''
-          }
+                : ''
+            }
+
+
+            ${
+              assignment?.reviewNotes
+
+                ? `
+
+                    <p>
+                      <strong>
+                        Review Notes:
+                      </strong>
+
+                      ${esc(
+                        assignment.reviewNotes
+                      )}
+                    </p>
+
+                  `
+
+                : ''
+            }
+
+
+            ${
+              assignment?.evidenceUrl
+
+                ? `
+
+                    <p>
+
+                      <a
+                        class="evidence-link"
+                        style="display:inline-flex;align-items:center;justify-content:center;width:auto;max-width:100%;min-height:44px;padding:12px 18px;margin:8px 0;border:1px solid rgba(212,175,55,.55);background:transparent;color:#e6c75a;text-decoration:none;font:600 12px/1.2 Arial,sans-serif;letter-spacing:.08em;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;"
+                        href="${esc(
+                          assignment.evidenceUrl
+                        )}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        OPEN LINKEDIN EVIDENCE ↗
+                      </a>
+
+                    </p>
+
+                  `
+
+                : ''
+            }
+
+
+            ${
+              assignment &&
+              (
+                statusLabel(
+                  assignment
+                ) ===
+                  'AWAITING REVIEW' ||
+                statusLabel(
+                  assignment
+                ) ===
+                  'REVISION REQUIRED' ||
+                statusLabel(
+                  assignment
+                ) ===
+                  'RELEASED'
+              )
+
+                ? `
+
+                    <button
+                      class="ghost hour-review-open"
+                      data-hour="${hour}"
+                    >
+                      OPEN HOUR ${hourLabel(hour)} →
+                    </button>
+
+                  `
+
+                : ''
+            }
+
+          </article>
+
+        `;
+
+      }
+    )
+      .join('');
+
+
+  root.innerHTML = `
+
+    <section class="review-page">
+
+      <button
+        class="ghost"
+        id="mission-back"
+      >
+        ← BACK TO COMMAND CENTRE
+      </button>
+
+
+      <p
+        class="eyebrow"
+        style="margin-top:30px"
+      >
+        INDIVIDUAL JOURNEY CONTROL ROOM
+      </p>
+
+
+      <h2>
+
+        ${esc(
+          learner.name
+        )}
+
+        <em>
+          · ${esc(
+            learner.journeyId
+          )}
+        </em>
+
+      </h2>
+
+
+      <div class="candidate">
+
+        <strong>
+          ${esc(
+            learner.authEmail
+          )}
+        </strong>
+
+        <span>
+          ${esc(
+            learner.course ||
+            '—'
+          )}
+        </span>
+
+      </div>
+
+
+      <h3 class="section-title">
+        JOURNEY INTELLIGENCE
+      </h3>
+
+
+      <div class="intelligence">
+
+        <article>
+
+          <small>
+            COMPLETED
+          </small>
+
+          <b>
+            ${completed}/${TOTAL_HOURS}
+          </b>
 
         </article>
 
 
-        ${
-          canReview
+        <article>
 
-            ? `
-                <h3 class="section-title">
-                  SUPER ADMIN DECISION
+          <small>
+            CURRENT STATE
+          </small>
+
+          <b>
+            ${esc(
+              currentStatus
+            )}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            NEXT HOUR
+          </small>
+
+          <b>
+            ${
+              nextHour
+                ? hourLabel(
+                    nextHour
+                  )
+                : 'COMPLETE'
+            }
+          </b>
+
+        </article>
+
+      </div>
+
+
+      ${
+        completed >= TOTAL_HOURS
+
+          ? `
+
+              <h3 class="section-title">
+                JOURNEY COMPLETE
+              </h3>
+
+              <article class="review">
+
+                <span>
+                  ZERO-TO-INFINITY
+                </span>
+
+                <h3>
+                  16 / 16 HOURS APPROVED
                 </h3>
 
-
-                <div class="fields">
-
-                  <label
-                    style="grid-column:1/-1"
-                  >
-
-                    Review Notes
-
-                    <textarea
-                      id="mission-review-notes"
-                      placeholder="Optional internal review note…"
-                    ></textarea>
-
-                  </label>
-
-
-                  <button
-                    class="gold"
-                    id="mission-approve"
-                  >
-
-                    APPROVE HOUR ${String(
-                      assignment.hour
-                    ).padStart(
-                      2,
-                      '0'
-                    )}
-
-                  </button>
-
-
-                  <button
-                    class="ghost"
-                    id="mission-revision"
-                  >
-                    RETURN FOR REVISION
-                  </button>
-
-                </div>
-              `
-
-            : `
-                <p class="quiet">
-
-                  ${
-                    status ===
-                    'APPROVED'
-
-                      ? 'This Mission has already been approved.'
-
-                      : status ===
-                        'REVISION REQUIRED'
-
-                        ? 'This Mission has been returned to the learner for revision.'
-
-                        : 'Review controls become available after evidence is submitted.'
-                  }
-
+                <p>
+                  This learner has completed the
+                  full Mission Journey.
                 </p>
-              `
-        }
 
-      </section>
-    `;
+              </article>
+
+            `
+
+          : nextAssignment
+
+            ? `
+
+                <h3 class="section-title">
+                  NEXT PROGRESSION
+                </h3>
+
+                <article class="review">
+
+                  <span>
+                    HOUR ${hourLabel(
+                      nextHour
+                    )}
+                  </span>
+
+                  <h3>
+                    ${esc(
+                      nextAssignment.theme ||
+                      `Mission Hour ${hourLabel(
+                        nextHour
+                      )}`
+                    )}
+                  </h3>
+
+                  <p>
+                    <strong>
+                      Status:
+                    </strong>
+
+                    ${esc(
+                      statusLabel(
+                        nextAssignment
+                      )
+                    )}
+                  </p>
+
+                  <p class="quiet">
+                    This Hour already exists.
+                    Mission Control will not create
+                    a duplicate assignment.
+                  </p>
+
+                </article>
+
+              `
+
+            : canReleaseNext
+
+              ? `
+
+                  <h3 class="section-title">
+                    NEXT PROGRESSION
+                  </h3>
+
+                  <article class="review">
+
+                    <span>
+                      HOUR ${hourLabel(
+                        nextHour
+                      )}
+                    </span>
+
+                    <h3>
+                      ${esc(
+                        nextDefinition.theme
+                      )}
+                    </h3>
+
+                    <p>
+                      ${esc(
+                        nextDefinition.deliverable
+                      )}
+                    </p>
+
+                    <p>
+
+                      <strong>
+                        Transformation:
+                      </strong>
+
+                      ${esc(
+                        nextDefinition.outcome
+                      )}
+
+                    </p>
+
+                    <p>
+                      <strong>
+                        Status:
+                      </strong>
+                      NOT RELEASED
+                    </p>
+
+                    <button
+                      class="gold"
+                      id="release-next-hour"
+                    >
+                      RELEASE HOUR ${hourLabel(
+                        nextHour
+                      )} →
+                    </button>
+
+                    <p class="quiet">
+                      Approval and release are separate
+                      Super Admin decisions.
+                      The learner receives access only
+                      after this release.
+                    </p>
+
+                  </article>
+
+                `
+
+              : `
+
+                  <h3 class="section-title">
+                    NEXT PROGRESSION
+                  </h3>
+
+                  <article class="review">
+
+                    <span>
+                      HOUR ${
+                        nextHour
+                          ? hourLabel(
+                              nextHour
+                            )
+                          : '—'
+                      }
+                    </span>
+
+                    <h3>
+                      LOCKED
+                    </h3>
+
+                    <p class="quiet">
+
+                      ${
+                        nextHour &&
+                        !HOUR_CATALOGUE[
+                          nextHour
+                        ]
+
+                          ? `
+                              Curriculum definition for
+                              Hour ${hourLabel(
+                                nextHour
+                              )} has not yet been configured.
+                              No release action is available.
+                            `
+
+                          : `
+                              The previous Hour must be
+                              approved before this Hour
+                              can be released.
+                            `
+                      }
+
+                    </p>
+
+                  </article>
+
+                `
+      }
+
+
+      <h3 class="section-title">
+        HOURS 01–16 · AUDIT TRAIL
+      </h3>
+
+
+      <div class="review-grid">
+        ${history}
+      </div>
+
+    </section>
+
+  `;
 
 
   document
@@ -1242,6 +1752,471 @@ function reviewMission(
         );
 
       };
+
+
+  document
+    .querySelectorAll(
+      '.hour-review-open'
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            const hour =
+              Number(
+                button.dataset.hour
+              );
+
+
+            const assignment =
+              assignmentForHour(
+                learner.journeyId,
+                hour
+              );
+
+
+            reviewMission(
+              learner,
+              assignment
+            );
+
+          };
+
+      }
+    );
+
+
+  const releaseButton =
+    document.querySelector(
+      '#release-next-hour'
+    );
+
+
+  if (releaseButton) {
+
+    releaseButton.onclick =
+      () =>
+        releaseHour(
+          learner,
+          nextHour
+        );
+
+  }
+
+}
+
+
+// ======================================================
+// REVIEW SCREEN
+// ======================================================
+
+function reviewMission(
+  learner,
+  assignment
+) {
+
+  if (!assignment) {
+
+    openLearnerControl(
+      learner
+    );
+
+    return;
+
+  }
+
+
+  const status =
+    statusLabel(
+      assignment
+    );
+
+
+  const canReview =
+    assignment.status ===
+      'SUBMITTED' &&
+    assignment.submitted ===
+      true &&
+    assignment.reviewStatus ===
+      'PENDING';
+
+
+  const evidence =
+    assignment.evidenceUrl
+
+      ? `
+
+          <a
+            class="evidence-link"
+            style="display:inline-flex;align-items:center;justify-content:center;width:auto;max-width:100%;min-height:44px;padding:12px 18px;margin:8px 0;border:1px solid rgba(212,175,55,.55);background:transparent;color:#e6c75a;text-decoration:none;font:600 12px/1.2 Arial,sans-serif;letter-spacing:.08em;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;"
+            href="${esc(
+              assignment.evidenceUrl
+            )}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            OPEN LINKEDIN EVIDENCE ↗
+          </a>
+
+        `
+
+      : `
+
+          <p class="quiet">
+            No evidence submitted yet.
+          </p>
+
+        `;
+
+
+  root.innerHTML = `
+
+    <section class="review-page">
+
+      <button
+        class="ghost"
+        id="mission-review-back"
+      >
+        ← BACK TO LEARNER CONTROL
+      </button>
+
+
+      <p
+        class="eyebrow"
+        style="margin-top:30px"
+      >
+        INDIVIDUAL MISSION REVIEW
+      </p>
+
+
+      <h2>
+
+        ${esc(
+          learner.name
+        )}
+
+        <em>
+          · HOUR ${hourLabel(
+            assignment.hour
+          )}
+        </em>
+
+      </h2>
+
+
+      <div class="candidate">
+
+        <strong>
+          ${esc(
+            learner.authEmail
+          )}
+        </strong>
+
+        <span>
+          ${esc(
+            learner.journeyId
+          )}
+        </span>
+
+      </div>
+
+
+      <h3 class="section-title">
+        MISSION INTELLIGENCE
+      </h3>
+
+
+      <div class="intelligence">
+
+        <article>
+
+          <small>
+            HOUR
+          </small>
+
+          <b>
+            ${hourLabel(
+              assignment.hour
+            )}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            MISSION STATUS
+          </small>
+
+          <b>
+            ${esc(
+              status
+            )}
+          </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            COMPLETED HOURS
+          </small>
+
+          <b>
+            ${completedCount(
+              learner
+            )}/${TOTAL_HOURS}
+          </b>
+
+        </article>
+
+      </div>
+
+
+      <h3 class="section-title">
+        ASSIGNMENT
+      </h3>
+
+
+      <article class="review">
+
+        <span>
+          HOUR ${hourLabel(
+            assignment.hour
+          )}
+        </span>
+
+        <h3>
+          ${esc(
+            assignment.theme
+          )}
+        </h3>
+
+        <p>
+          ${esc(
+            assignment.deliverable
+          )}
+        </p>
+
+        <p>
+
+          <strong>
+            Transformation:
+          </strong>
+
+          ${esc(
+            assignment.outcome
+          )}
+
+        </p>
+
+      </article>
+
+
+      <h3 class="section-title">
+        EVIDENCE
+      </h3>
+
+
+      <article class="review">
+
+        <span>
+          LINKEDIN EVIDENCE
+        </span>
+
+        ${evidence}
+
+
+        <p>
+
+          <strong>
+            Submitted:
+          </strong>
+
+          ${formatDate(
+            assignment.submittedAt
+          )}
+
+        </p>
+
+
+        <p>
+
+          <strong>
+            Review Status:
+          </strong>
+
+          ${esc(
+            assignment.reviewStatus ||
+            '—'
+          )}
+
+        </p>
+
+
+        ${
+          assignment.reviewedAt
+
+            ? `
+
+                <p>
+                  <strong>
+                    Last Reviewed:
+                  </strong>
+
+                  ${formatDate(
+                    assignment.reviewedAt
+                  )}
+                </p>
+
+              `
+
+            : ''
+        }
+
+
+        ${
+          assignment.reviewedBy
+
+            ? `
+
+                <p>
+                  <strong>
+                    Reviewed By:
+                  </strong>
+
+                  ${esc(
+                    assignment.reviewedBy
+                  )}
+                </p>
+
+              `
+
+            : ''
+        }
+
+
+        ${
+          assignment.reviewNotes
+
+            ? `
+
+                <p>
+                  <strong>
+                    Review Notes:
+                  </strong>
+
+                  ${esc(
+                    assignment.reviewNotes
+                  )}
+                </p>
+
+              `
+
+            : ''
+        }
+
+      </article>
+
+
+      ${
+        canReview
+
+          ? `
+
+              <h3 class="section-title">
+                SUPER ADMIN DECISION
+              </h3>
+
+
+              <div class="fields">
+
+                <label
+                  style="grid-column:1/-1"
+                >
+
+                  Review Notes
+
+                  <textarea
+                    id="mission-review-notes"
+                    placeholder="Optional internal review note…"
+                  ></textarea>
+
+                </label>
+
+
+                <button
+                  class="gold"
+                  id="mission-approve"
+                >
+                  APPROVE HOUR ${hourLabel(
+                    assignment.hour
+                  )}
+                </button>
+
+
+                <button
+                  class="ghost"
+                  id="mission-revision"
+                >
+                  RETURN FOR REVISION
+                </button>
+
+              </div>
+
+            `
+
+          : `
+
+              <p class="quiet">
+
+                ${
+                  status === 'APPROVED'
+
+                    ? `
+                        This Mission has already
+                        been approved.
+                      `
+
+                    : status ===
+                        'REVISION REQUIRED'
+
+                      ? `
+                          This Mission has been
+                          returned to the learner
+                          for revision.
+                        `
+
+                      : `
+                          Review controls become
+                          available after evidence
+                          is submitted.
+                        `
+                }
+
+              </p>
+
+            `
+      }
+
+    </section>
+
+  `;
+
+
+  document
+    .querySelector(
+      '#mission-review-back'
+    )
+    .onclick =
+      () =>
+        openLearnerControl(
+          learner
+        );
 
 
   if (canReview) {
@@ -1440,14 +2415,24 @@ async function approveMission(
 
 
     alert(
-      `Hour ${assignment.hour} approved for ${learner.name}.`
+      `Hour ${assignment.hour} approved for ${learner.name}. The next Hour remains locked until you release it.`
     );
 
 
-    await showMissionControl(
-      root,
-      currentAdmin
+    await loadMissionData();
+
+    const refreshedLearner =
+      learners.find(
+        item =>
+          item.journeyId ===
+          learner.journeyId
+      ) || learner;
+
+
+    openLearnerControl(
+      refreshedLearner
     );
+
 
   } catch (error) {
 
@@ -1576,10 +2561,20 @@ async function returnForRevision(
     );
 
 
-    await showMissionControl(
-      root,
-      currentAdmin
+    await loadMissionData();
+
+    const refreshedLearner =
+      learners.find(
+        item =>
+          item.journeyId ===
+          learner.journeyId
+      ) || learner;
+
+
+    openLearnerControl(
+      refreshedLearner
     );
+
 
   } catch (error) {
 
@@ -1588,6 +2583,238 @@ async function returnForRevision(
 
     alert(
       `Revision action failed: ${error.message}`
+    );
+
+  }
+
+}
+
+
+// ======================================================
+// RELEASE NEXT HOUR
+// ======================================================
+
+async function releaseHour(
+  learner,
+  hour
+) {
+
+  const numericHour =
+    Number(hour);
+
+
+  const definition =
+    HOUR_CATALOGUE[
+      numericHour
+    ];
+
+
+  if (!definition) {
+
+    alert(
+      `Hour ${hourLabel(numericHour)} curriculum has not yet been configured.`
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !canReleaseHour(
+      learner,
+      numericHour
+    )
+  ) {
+
+    alert(
+      `Hour ${hourLabel(numericHour)} cannot be released yet. Refresh Mission Control and verify the previous Hour is approved.`
+    );
+
+    return;
+
+  }
+
+
+  const confirmed =
+    window.confirm(
+      `Release Hour ${numericHour} to ${learner.name}?\n\n${definition.theme}\n\nThe learner will receive access immediately.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const documentId =
+    `${learner.journeyId}-H${hourLabel(
+      numericHour
+    )}`;
+
+
+  const assignmentRef =
+    doc(
+      db,
+      'mission_assignments',
+      documentId
+    );
+
+
+  try {
+
+    await runTransaction(
+      db,
+      async transaction => {
+
+        const existing =
+          await transaction.get(
+            assignmentRef
+          );
+
+
+        if (existing.exists()) {
+
+          throw new Error(
+            `Hour ${hourLabel(numericHour)} already exists for this learner.`
+          );
+
+        }
+
+
+        if (numericHour > 1) {
+
+          const previousId =
+            `${learner.journeyId}-H${hourLabel(
+              numericHour - 1
+            )}`;
+
+
+          const previousRef =
+            doc(
+              db,
+              'mission_assignments',
+              previousId
+            );
+
+
+          const previousSnapshot =
+            await transaction.get(
+              previousRef
+            );
+
+
+          if (!previousSnapshot.exists()) {
+
+            throw new Error(
+              `Hour ${hourLabel(
+                numericHour - 1
+              )} assignment was not found.`
+            );
+
+          }
+
+
+          const previous =
+            previousSnapshot.data();
+
+
+          if (
+            previous.status !==
+              'APPROVED' &&
+            previous.reviewStatus !==
+              'APPROVED'
+          ) {
+
+            throw new Error(
+              `Hour ${hourLabel(
+                numericHour - 1
+              )} must be approved before Hour ${hourLabel(
+                numericHour
+              )} can be released.`
+            );
+
+          }
+
+        }
+
+
+        transaction.set(
+          assignmentRef,
+          {
+
+            journeyId:
+              learner.journeyId,
+
+            hour:
+              numericHour,
+
+            theme:
+              definition.theme,
+
+            deliverable:
+              definition.deliverable,
+
+            outcome:
+              definition.outcome,
+
+            evidenceUrl:
+              '',
+
+            releasedAt:
+              serverTimestamp(),
+
+            releasedBy:
+              currentAdmin?.email ||
+              'SUPER ADMIN',
+
+            status:
+              'RELEASED',
+
+            reviewStatus:
+              'PENDING',
+
+            submitted:
+              false,
+
+            submittedAt:
+              null
+
+          }
+        );
+
+      }
+    );
+
+
+    alert(
+      `Hour ${hourLabel(numericHour)} released successfully to ${learner.name}.`
+    );
+
+
+    await loadMissionData();
+
+
+    const refreshedLearner =
+      learners.find(
+        item =>
+          item.journeyId ===
+          learner.journeyId
+      ) || learner;
+
+
+    openLearnerControl(
+      refreshedLearner
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    alert(
+      `Release failed: ${error.message}`
     );
 
   }
@@ -1620,32 +2847,23 @@ function exportCsv() {
   const headers = [
 
     'Journey ID',
-
     'Learner',
-
     'Email',
-
     'Course',
-
-    'Current Hour',
-
     'Completed Hours',
+    'Current Hour',
+    'Current Status',
 
-    'Total Hours',
-
-    'Mission Status',
-
-    'Review Status',
-
-    'Evidence URL',
-
-    'Submitted At',
-
-    'Reviewed At',
-
-    'Reviewed By',
-
-    'Review Notes'
+    ...Array.from(
+      {
+        length:
+          TOTAL_HOURS
+      },
+      (_, position) =>
+        `Hour ${hourLabel(
+          position + 1
+        )}`
+    )
 
   ];
 
@@ -1654,47 +2872,52 @@ function exportCsv() {
     learners.map(
       learner => {
 
-        const assignment =
+        const current =
           getCurrentAssignment(
             learner.journeyId
+          );
+
+
+        const hourStatuses =
+          Array.from(
+            {
+              length:
+                TOTAL_HOURS
+            },
+            (_, position) => {
+
+              const assignment =
+                assignmentForHour(
+                  learner.journeyId,
+                  position + 1
+                );
+
+
+              return assignment
+                ? statusLabel(
+                    assignment
+                  )
+                : 'NOT RELEASED';
+
+            }
           );
 
 
         return [
 
           learner.journeyId,
-
           learner.name,
-
           learner.authEmail,
-
           learner.course,
-
-          assignment?.hour || '',
-
-          learner.completedHours ?? 0,
-
-          learner.totalHours ?? 16,
-
-          assignment?.status || '',
-
-          assignment?.reviewStatus || '',
-
-          assignment?.evidenceUrl || '',
-
-          formatDate(
-            assignment?.submittedAt
+          completedCount(
+            learner
+          ),
+          current?.hour || '',
+          statusLabel(
+            current
           ),
 
-          formatDate(
-            assignment?.reviewedAt
-          ),
-
-          assignment?.reviewedBy ||
-          '',
-
-          assignment?.reviewNotes ||
-          ''
+          ...hourStatuses
 
         ];
 
@@ -1748,7 +2971,7 @@ function exportCsv() {
 
 
   anchor.download =
-    `sarlayash-mission-control-${
+    `sarlayash-mission-command-centre-${
       new Date()
         .toISOString()
         .slice(0, 10)

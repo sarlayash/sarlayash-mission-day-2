@@ -42,6 +42,11 @@ let currentAdmin = null;
 
 function header() {
 
+  setTimeout(
+    startIstClock,
+    0
+  );
+
   return `
     <div class="grain"></div>
 
@@ -54,13 +59,85 @@ function header() {
         SARLAYASH <i>MISSION</i>
       </a>
 
-      <span class="day">
-        SUPER ADMIN
-      </span>
+      <div class="admin-header-meta">
+        <span class="day">
+          SUPER ADMIN
+        </span>
+        <span
+          id="ist-clock"
+          class="day"
+          style="display:block; margin-top:8px; text-align:right; font-size:12px;"
+        >
+          INDIA · IST
+        </span>
+      </div>
 
     </header>
   `;
 
+}
+
+
+
+// ======================================================
+// LIVE INDIA DATE + TIME
+// ======================================================
+
+let istClockTimer = null;
+
+function updateIstClock() {
+
+  const clock =
+    document.querySelector('#ist-clock');
+
+  if (!clock) {
+    return;
+  }
+
+  const now =
+    new Date();
+
+  const date =
+    new Intl.DateTimeFormat(
+      'en-IN',
+      {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      }
+    ).format(now);
+
+  const time =
+    new Intl.DateTimeFormat(
+      'en-IN',
+      {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }
+    ).format(now);
+
+  clock.textContent =
+    `${date} · ${time} · IST`;
+}
+
+
+function startIstClock() {
+
+  updateIstClock();
+
+  if (istClockTimer) {
+    clearInterval(istClockTimer);
+  }
+
+  istClockTimer =
+    setInterval(
+      updateIstClock,
+      1000
+    );
 }
 
 
