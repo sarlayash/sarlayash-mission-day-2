@@ -37,31 +37,23 @@ let currentAdmin = null;
 // ======================================================
 
 const HOUR_CATALOGUE = {
-
-  1: {
-    theme:
-      'Code of Business Conduct — The Code You Would Be Willing to Live By',
-
-    deliverable:
-      'Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.',
-
-    outcome:
-      'Policy Reader → Policy Thinker'
-  },
-
-  2: {
-    theme:
-      'Code of Operations & Conduct',
-
-    deliverable:
-      'Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, explain one workplace situation showing what the principle means in action.',
-
-    outcome:
-      'Task Participant → Responsible Operator'
-  }
-
+  1: { theme: 'Code of Business Conduct — The Code You Would Be Willing to Live By', deliverable: 'Build your own 5-point professional Code of Business Conduct. For each principle, include one realistic workplace situation showing what that principle means in action. Cover integrity, accountability, fairness, conflicts of interest and professional responsibility.', outcome: 'Policy Reader → Policy Thinker' },
+  2: { theme: 'Code of Operations & Conduct', deliverable: 'Build a practical Code of Operations & Conduct covering ownership, communication, information handling, responsible AI use, deadlines, collaboration and professional behaviour. Include realistic workplace situations.', outcome: 'Task Participant → Responsible Operator' },
+  3: { theme: 'Information Security — Every Employee Is Part of the Security Team', deliverable: 'Complete a Workplace Security Risk Hunt across at least 8 realistic situations involving passwords, phishing, suspicious links, public Wi-Fi, shared devices, credentials, unknown USB devices, screen exposure, social engineering and confidential information. Create a personal 10-point Information Security Checklist.', outcome: 'Technology User → Security-Conscious Professional' },
+  4: { theme: 'Data Privacy & Confidentiality — Access Is Not Ownership', deliverable: 'Create a Workplace Data Classification & Handling Guide. Classify at least 12 examples as Public, Internal, Confidential or Restricted and define access, sharing, storage and prohibited actions.', outcome: 'Data User → Trusted Data Custodian' },
+  5: { theme: 'POSH & Respectful Workplace — Professionalism Has Boundaries', deliverable: 'Build a Respectful Workplace Decision Guide using at least 8 realistic scenarios involving communication, personal boundaries, inappropriate remarks, unwanted behaviour, digital messages, power dynamics, bystander responsibility and professional escalation.', outcome: 'Workplace Participant → Respectful Professional' },
+  6: { theme: 'AML, Fraud & Financial Integrity — Question What Does Not Look Right', deliverable: 'Investigate a fictional corporate financial-integrity case. Identify at least 8 red flags, separate facts from assumptions and create an Escalation Report without investigating beyond your authority.', outcome: 'Transaction Observer → Financial-Integrity Sentinel' },
+  7: { theme: 'Conflict of Interest, Gifts & Anti-Bribery — Integrity Before Advantage', deliverable: 'Complete an Integrity Decision Simulation with at least 8 workplace situations involving gifts, vendors, personal relationships, referrals, favoritism, confidential information, improper advantages and potential bribery. Create a disclosure checklist.', outcome: 'Rule Follower → Integrity-First Professional' },
+  8: { theme: 'Responsible AI — Use AI Without Becoming the Risk', deliverable: 'Create a Responsible AI Workplace Protocol across at least 8 situations involving confidential prompts, hallucinations, generated code, customer data, IP, automated decisions, citations, AI-generated communication and human verification.', outcome: 'AI User → Accountable AI Professional' },
+  9: { theme: 'Intellectual Property & Digital Ownership — Create Without Crossing the Line', deliverable: 'Conduct an IP & Digital Ownership Audit of a fictional project containing source code, online images, AI-generated material, company documents, third-party libraries, presentation content and employee-created assets. Produce an IP-Safe Delivery Checklist.', outcome: 'Content User → IP-Responsible Creator' },
+  10: { theme: 'Corporate Communication — Clarity Is an Operating Skill', deliverable: 'Create a Corporate Communication Pack by rewriting at least 8 poor workplace communications: email, team update, meeting summary, blocker notification, deadline-risk message, clarification request, stakeholder update and escalation.', outcome: 'Message Sender → Corporate Communicator' },
+  11: { theme: 'Ownership, Accountability & Escalation — No Silent Failures', deliverable: 'Build a Recovery & Escalation Plan for a fictional project facing a dependency, unclear requirement and approaching deadline. Document ownership, impact, mitigation, stakeholders, decisions and the actual escalation message.', outcome: 'Task Doer → Accountable Owner' },
+  12: { theme: 'SOP & Process Discipline — Make Your Work Repeatable', deliverable: 'Convert one familiar task or process into a corporate-grade SOP with purpose, prerequisites, access requirements, numbered steps, expected outputs, validation checks, common failures, escalation points, version information and handover notes.', outcome: 'Individual Executor → Process Engineer' },
+  13: { theme: 'Quality Assurance & Definition of Done — Done Must Be Provable', deliverable: 'Build a Quality Assurance Pack for one digital deliverable. Define acceptance criteria, normal tests, edge cases, failure scenarios, evidence requirements and Definition of Done, then execute and document results.', outcome: 'Output Creator → Quality-Accountable Engineer' },
+  14: { theme: 'Time, Priority & Stakeholder Management — Deliver What Matters First', deliverable: 'Run a realistic priority simulation with competing tasks, deadlines, dependencies and stakeholders. Build a priority plan, communicate trade-offs, protect critical work and document decisions.', outcome: 'Busy Worker → Priority-Driven Operator' },
+  15: { theme: 'Incident Response & Business Continuity — Do Not Hide the Failure', deliverable: 'Run a fictional Corporate Incident War Room involving a security or operational failure. Document detection, containment, notification, evidence preservation, impact, recovery, communication, root-cause questions and preventive actions.', outcome: 'Problem Witness → Incident-Ready Professional' },
+  16: { theme: 'Day-One Corporate Simulation — Plug In. Understand. Execute. Deliver.', deliverable: 'Complete the final Plug-and-Play Learning Engineer simulation in an unfamiliar corporate environment. Clarify an incomplete requirement, manage security and confidentiality, use AI responsibly, communicate progress, handle a blocker and incident, verify quality and submit a consolidated Corporate Day-One Execution Pack.', outcome: 'Learning Engineer → Day-One Corporate Operator' }
 };
-
 
 const TOTAL_HOURS = 16;
 
@@ -1362,8 +1354,7 @@ function openLearnerControl(
                     <p>
 
                       <a
-                        class="evidence-link"
-                        style="display:inline-flex;align-items:center;justify-content:center;width:auto;max-width:100%;min-height:44px;padding:12px 18px;margin:8px 0;border:1px solid rgba(212,175,55,.55);background:transparent;color:#e6c75a;text-decoration:none;font:600 12px/1.2 Arial,sans-serif;letter-spacing:.08em;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;"
+                        class="gold"
                         href="${esc(
                           assignment.evidenceUrl
                         )}"
@@ -1377,6 +1368,22 @@ function openLearnerControl(
 
                   `
 
+                : ''
+            }
+
+
+            ${
+              !assignment &&
+              canReleaseHour(learner, hour) &&
+              HOUR_CATALOGUE[hour]
+                ? `
+                    <button
+                      class="gold hour-release-ready"
+                      data-hour="${hour}"
+                    >
+                      RELEASE HOUR ${hourLabel(hour)} →
+                    </button>
+                  `
                 : ''
             }
 
@@ -1788,6 +1795,16 @@ function openLearnerControl(
     );
 
 
+  document
+    .querySelectorAll('.hour-release-ready')
+    .forEach(button => {
+      button.onclick = () => {
+        const hour = Number(button.dataset.hour);
+        releaseHour(learner, hour);
+      };
+    });
+
+
   const releaseButton =
     document.querySelector(
       '#release-next-hour'
@@ -1849,8 +1866,7 @@ function reviewMission(
       ? `
 
           <a
-            class="evidence-link"
-            style="display:inline-flex;align-items:center;justify-content:center;width:auto;max-width:100%;min-height:44px;padding:12px 18px;margin:8px 0;border:1px solid rgba(212,175,55,.55);background:transparent;color:#e6c75a;text-decoration:none;font:600 12px/1.2 Arial,sans-serif;letter-spacing:.08em;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;"
+            class="gold"
             href="${esc(
               assignment.evidenceUrl
             )}"
