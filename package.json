@@ -2,6 +2,7 @@
   "name": "sarlayash-day2-talent-discovery",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,7 +11,12 @@
   "dependencies": {
     "firebase": "^11.0.2",
     "firebase-admin": "^14.2.0",
-    "jspdf": "^2.5.2"
+    "jspdf": "^2.5.2",
+    "nodemailer": "^9.0.4",
+    "qrcode": "^1.5.4"
+  },
+  "overrides": {
+    "jwks-rsa": "3.2.2"
   },
   "devDependencies": {
     "vite": "^6.0.1"

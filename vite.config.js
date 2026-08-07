@@ -6,8 +6,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        assessment: resolve(__dirname, 'assessment.html'),
         admin: resolve(__dirname, 'admin.html'),
-        mission: resolve(__dirname, 'mission.html')
+        mission: resolve(__dirname, 'mission.html'),
+        verify: resolve(__dirname, 'verify.html')
       }
     }
   }
