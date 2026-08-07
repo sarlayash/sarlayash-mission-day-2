@@ -1,0 +1,13 @@
+git init
+git add .
+git commit -m "Initial Code Architect release"
+git branch -M main
+git remote add origin https://github.com/sarlayash/code-architect.git
+git push -u origin main
+
+git init
+git add .
+git commit -m "Build Platform Commander simulator"
+git branch -M main
+git remote add origin https://github.com/sarlayash/platform-commander.git
+git push -u origin main

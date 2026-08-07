@@ -1,0 +1,630 @@
+[
+  {
+    "id": "SYM-D2-2026-1225-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-1225",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "evidenceUrl": "",
+      "submittedAt": null,
+      "releasedAt": {
+        "_seconds": 1785738416,
+        "_nanoseconds": 819000000
+      }
+    }
+  },
+  {
+    "id": "SYM-D2-2026-1276-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-1276",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738415,
+        "_nanoseconds": 47000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/manju-kushwaha-b51a73327_sarlayash-sarlayashmission-professionalethics-activity-7490423634411446274-A5_V?utm_source=share&utm_medium=member_android&rcm=ACoAAFKPua0B5vzwWRtSj4lq53qbq6yGbLbXSXA",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785858803,
+        "_nanoseconds": 70000000
+      },
+      "reviewNotes": "Well done Ma'am!",
+      "reviewedAt": {
+        "_seconds": 1785867347,
+        "_nanoseconds": 767000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-1276-H02",
+    "data": {
+      "journeyId": "SYM-D2-2026-1276",
+      "hour": 2,
+      "theme": "Code of Operations & Conduct",
+      "deliverable": "Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, explain one workplace situation showing what the principle means in action.",
+      "outcome": "Task Participant → Responsible Operator",
+      "releasedBy": "namaste@sarlayash.com",
+      "reviewStatus": "PENDING",
+      "releasedAt": {
+        "_seconds": 1785867368,
+        "_nanoseconds": 230000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/manju-kushwaha-b51a73327_sarlayash-missioncontrol-codeofoperations-activity-7490692694965436416-GA_k?utm_source=share&utm_medium=member_android&rcm=ACoAAFKPua0B5vzwWRtSj4lq53qbq6yGbLbXSXA",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785921058,
+        "_nanoseconds": 258000000
+      },
+      "status": "SUBMITTED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-2462-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-2462",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738427,
+        "_nanoseconds": 908000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/feed/update/urn:li:activity:7490399613762363392/",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785850708,
+        "_nanoseconds": 665000000
+      },
+      "reviewNotes": "Reviewed. Awesome Job!",
+      "reviewedAt": {
+        "_seconds": 1785857604,
+        "_nanoseconds": 326000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-2462-H02",
+    "data": {
+      "journeyId": "SYM-D2-2026-2462",
+      "hour": 2,
+      "theme": "Code of Operations & Conduct",
+      "deliverable": "Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, include one workplace situation showing what the principle means in action.",
+      "outcome": "Task Participant → Responsible Operator",
+      "releasedBy": "namaste@sarlayash.com",
+      "releasedAt": {
+        "_seconds": 1785863953,
+        "_nanoseconds": 422000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/feed/update/urn:li:activity:7490616901526515712/",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785902355,
+        "_nanoseconds": 87000000
+      },
+      "reviewNotes": "Approved.",
+      "reviewedAt": {
+        "_seconds": 1785916932,
+        "_nanoseconds": 106000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-2462-H03",
+    "data": {
+      "journeyId": "SYM-D2-2026-2462",
+      "hour": 3,
+      "theme": "Information Security — Every Employee Is Part of the Security Team",
+      "deliverable": "Complete a Workplace Security Risk Hunt across at least 8 realistic situations involving passwords, phishing, suspicious links, public Wi-Fi, shared devices, credentials, unknown USB devices, screen exposure, social engineering and confidential information. Create a personal 10-point Information Security Checklist.",
+      "outcome": "Technology User → Security-Conscious Professional",
+      "releasedBy": "namaste@sarlayash.com",
+      "reviewStatus": "PENDING",
+      "releasedAt": {
+        "_seconds": 1785916946,
+        "_nanoseconds": 860000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/feed/update/urn:li:activity:7490688726184943616/",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785919613,
+        "_nanoseconds": 840000000
+      },
+      "status": "SUBMITTED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-2608-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-2608",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738426,
+        "_nanoseconds": 409000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/nidhi-kumari-79a876411_day1-task-ugcPost-7490419214512504832-05h1/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGj1E-YBlSmtEpAUn-aP1YGDA7mwAOErcM8",
+      "submittedAt": {
+        "_seconds": 1785855137,
+        "_nanoseconds": 134000000
+      },
+      "submitted": false,
+      "reviewNotes": "Please recheck...Link is missing.",
+      "reviewedAt": {
+        "_seconds": 1785857827,
+        "_nanoseconds": 221000000
+      },
+      "reviewStatus": "REVISION_REQUIRED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "RELEASED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-4009-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-4009",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785857353,
+        "_nanoseconds": 292000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-4991-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-4991",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738418,
+        "_nanoseconds": 503000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/in/jhanavi-u-16922734a?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "submittedAt": {
+        "_seconds": 1785850059,
+        "_nanoseconds": 885000000
+      },
+      "submitted": false,
+      "reviewNotes": "Please recheck..link is missing",
+      "reviewedAt": {
+        "_seconds": 1785857691,
+        "_nanoseconds": 351000000
+      },
+      "reviewStatus": "REVISION_REQUIRED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "RELEASED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-5222-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-5222",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785856204,
+        "_nanoseconds": 891000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-6266-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-6266",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738424,
+        "_nanoseconds": 834000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/trisha-ghosh-619b72406_sarlayashmission-sarlayashlearningsolutions-share-7490420398866673664-PENx/?utm_source=share&utm_medium=member_android&rcm=ACoAAGfBa_UBoexZWQRozKVjkaEdf4hZtAnYuc4",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785856964,
+        "_nanoseconds": 9000000
+      },
+      "reviewNotes": "Awesome job! Approved",
+      "reviewedAt": {
+        "_seconds": 1785857767,
+        "_nanoseconds": 616000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-6266-H02",
+    "data": {
+      "journeyId": "SYM-D2-2026-6266",
+      "hour": 2,
+      "theme": "Code of Operations & Conduct",
+      "deliverable": "Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, include one workplace situation showing what the principle means in action.",
+      "outcome": "Task Participant → Responsible Operator",
+      "releasedBy": "namaste@sarlayash.com",
+      "releasedAt": {
+        "_seconds": 1785866478,
+        "_nanoseconds": 73000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/trisha-ghosh-619b72406_codeofconduct-operations-responsibleoperator-share-7490682289316732929-dbk0/?utm_source=share&utm_medium=member_android&rcm=ACoAAGfBa_UBoexZWQRozKVjkaEdf4hZtAnYuc4",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785917902,
+        "_nanoseconds": 24000000
+      },
+      "reviewNotes": "Approved ! Well done",
+      "reviewedAt": {
+        "_seconds": 1785918116,
+        "_nanoseconds": 449000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-6528-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-6528",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785857352,
+        "_nanoseconds": 568000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-7169-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-7169",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785857351,
+        "_nanoseconds": 994000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-7750-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-7750",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785856205,
+        "_nanoseconds": 699000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-7984-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-7984",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "evidenceUrl": "",
+      "submittedAt": null,
+      "releasedAt": {
+        "_seconds": 1785738420,
+        "_nanoseconds": 32000000
+      }
+    }
+  },
+  {
+    "id": "SYM-D2-2026-8402-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-8402",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785856205,
+        "_nanoseconds": 281000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-8825-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-8825",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company's COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785731174,
+        "_nanoseconds": 0
+      },
+      "evidenceUrl": "https://www.linkedin.com/in/maaz-pasha-a-b01b83422?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "submittedAt": {
+        "_seconds": 1785854202,
+        "_nanoseconds": 127000000
+      },
+      "submitted": false,
+      "reviewNotes": "Please recheclk..link is missing.",
+      "reviewedAt": {
+        "_seconds": 1785857727,
+        "_nanoseconds": 340000000
+      },
+      "reviewStatus": "REVISION_REQUIRED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "RELEASED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-9409-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-9409",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785738423,
+        "_nanoseconds": 174000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/in/amber-khanum-6088bb336?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "submittedAt": {
+        "_seconds": 1785849562,
+        "_nanoseconds": 953000000
+      },
+      "submitted": false,
+      "reviewNotes": "Please recheck...link is wrong.",
+      "reviewedAt": {
+        "_seconds": 1785857652,
+        "_nanoseconds": 110000000
+      },
+      "reviewStatus": "REVISION_REQUIRED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "RELEASED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-9920-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-9920",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "evidenceUrl": "",
+      "releasedAt": {
+        "_seconds": 1785856206,
+        "_nanoseconds": 498000000
+      },
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "submittedAt": null
+    }
+  },
+  {
+    "id": "SYM-D2-2026-9938-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-9938",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "status": "RELEASED",
+      "reviewStatus": "PENDING",
+      "submitted": false,
+      "evidenceUrl": "",
+      "submittedAt": null,
+      "releasedAt": {
+        "_seconds": 1785738421,
+        "_nanoseconds": 648000000
+      }
+    }
+  },
+  {
+    "id": "SYM-D2-2026-9951-H01",
+    "data": {
+      "journeyId": "SYM-D2-2026-9951",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one real-world workplace situation showing what that principle means in action. Do not copy or rewrite an existing company’s COBC. Build something you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedAt": {
+        "_seconds": 1785856206,
+        "_nanoseconds": 66000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/arpan-mandal-5b417a418_sarlayashmission-codeofbusinessconduct-businessethics-activity-7490427436845711360-0tiO?utm_source=share&utm_medium=member_android&rcm=ACoAAGoZidgBwZ-bN-lE5eOGEWvOtsWEYs9q8n8",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785858305,
+        "_nanoseconds": 328000000
+      },
+      "reviewNotes": "Good Job! Missed 5-points",
+      "reviewedAt": {
+        "_seconds": 1785867180,
+        "_nanoseconds": 359000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-D2-2026-9951-H02",
+    "data": {
+      "journeyId": "SYM-D2-2026-9951",
+      "hour": 2,
+      "theme": "Code of Operations & Conduct",
+      "deliverable": "Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define clear operating principles for ownership, communication, information handling, responsible AI use and professional behaviour. For each principle, explain one workplace situation showing what the principle means in action.",
+      "outcome": "Task Participant → Responsible Operator",
+      "releasedBy": "namaste@sarlayash.com",
+      "reviewStatus": "PENDING",
+      "releasedAt": {
+        "_seconds": 1785867220,
+        "_nanoseconds": 274000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/posts/arpan-mandal-5b417a418_sarlayashmission-sarlayash-missionreleased-activity-7490697197030776832-d9k5?utm_source=share&utm_medium=member_android&rcm=ACoAAGoZidgBwZ-bN-lE5eOGEWvOtsWEYs9q8n8",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785921844,
+        "_nanoseconds": 183000000
+      },
+      "status": "SUBMITTED"
+    }
+  },
+  {
+    "id": "SYM-DEMO-2026-0001-H01",
+    "data": {
+      "journeyId": "SYM-DEMO-2026-0001",
+      "hour": 1,
+      "theme": "Code of Business Conduct — The Code You Would Be Willing to Live By",
+      "deliverable": "Build your own 5-point professional Code of Business Conduct. For each principle, include one realistic workplace situation showing what that principle means in action. Cover integrity, accountability, fairness, conflicts of interest and professional responsibility. Do not copy or rewrite an existing company policy. Build a code you would personally be willing to follow and be held accountable for.",
+      "outcome": "Policy Reader → Policy Thinker",
+      "releasedBy": "namaste@sarlayash.com",
+      "releasedAt": {
+        "_seconds": 1785899842,
+        "_nanoseconds": 260000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/feed/",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785899919,
+        "_nanoseconds": 133000000
+      },
+      "reviewNotes": "Approved",
+      "reviewedAt": {
+        "_seconds": 1785899986,
+        "_nanoseconds": 293000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-DEMO-2026-0001-H02",
+    "data": {
+      "journeyId": "SYM-DEMO-2026-0001",
+      "hour": 2,
+      "theme": "Code of Operations & Conduct — How Professionals Actually Work",
+      "deliverable": "Build a practical Code of Operations & Conduct for how you will work inside a professional team. Define operating principles for ownership, communication, information handling, responsible AI use, deadlines, collaboration and professional behaviour. For each principle, include one realistic workplace situation showing the principle in action.",
+      "outcome": "Task Participant → Responsible Operator",
+      "releasedBy": "namaste@sarlayash.com",
+      "releasedAt": {
+        "_seconds": 1785900010,
+        "_nanoseconds": 807000000
+      },
+      "evidenceUrl": "https://www.linkedin.com/feed/",
+      "submitted": true,
+      "submittedAt": {
+        "_seconds": 1785900085,
+        "_nanoseconds": 587000000
+      },
+      "reviewNotes": "approved",
+      "reviewedAt": {
+        "_seconds": 1785900127,
+        "_nanoseconds": 99000000
+      },
+      "reviewStatus": "APPROVED",
+      "reviewedBy": "namaste@sarlayash.com",
+      "status": "APPROVED"
+    }
+  },
+  {
+    "id": "SYM-DEMO-2026-0001-H03",
+    "data": {
+      "journeyId": "SYM-DEMO-2026-0001",
+      "hour": 3,
+      "theme": "Information Security — Every Employee Is Part of the Security Team",
+      "deliverable": "Complete a Workplace Security Risk Hunt across at least 8 realistic situations involving passwords, phishing, suspicious links, public Wi-Fi, shared devices, credentials, unknown USB devices, screen exposure, social engineering and confidential information. Create a personal 10-point Information Security Checklist.",
+      "outcome": "Technology User → Security-Conscious Professional",
+      "releasedBy": "namaste@sarlayash.com",
+      "releasedAt": {
+        "_seconds": 1785901266,
+        "_nanoseconds": 508000000
+      },
+      "reviewNotes": "no approval",
+      "reviewedAt": {
+        "_seconds": 1785918883,
+        "_nanoseconds": 423000000
+      },
+      "reviewedBy": "namaste@sarlayash.com",
+      "evidenceUrl": "https://www.linkedin.com/in/kapil-narula-63447026/",
+      "submitted": true,
+      "reviewStatus": "PENDING",
+      "submittedAt": {
+        "_seconds": 1785919067,
+        "_nanoseconds": 762000000
+      },
+      "status": "SUBMITTED"
+    }
+  }
+]

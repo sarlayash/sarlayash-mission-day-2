@@ -1,0 +1,192 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==================================================
+    // AUTHORIZATION HELPERS
+    // ==================================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && exists(
+          /databases/$(database)/documents/admins/$(request.auth.uid)
+        )
+        && get(
+          /databases/$(database)/documents/admins/$(request.auth.uid)
+        ).data.active == true
+        && get(
+          /databases/$(database)/documents/admins/$(request.auth.uid)
+        ).data.role == 'ADMIN';
+    }
+
+    function isOwnMissionUser() {
+      return isSignedIn()
+        && request.auth.token.email != null
+        && resource.data.authEmail == request.auth.token.email;
+    }
+
+
+    // ==================================================
+    // DAY 2 RESPONSES
+    // ==================================================
+
+    match /day2_responses/{responseId} {
+
+      allow create: if
+        request.resource.data.keys().hasAll([
+          'journeyId',
+          'candidate',
+          'answers',
+          'submittedAt'
+        ])
+        && request.resource.data.candidate.name is string
+        && request.resource.data.candidate.email is string
+        && request.resource.data.answers.keys().hasAll([
+          'q1',
+          'q2',
+          'q3',
+          'q4',
+          'q5',
+          'q6',
+          'q7',
+          'q8',
+          'q9',
+          'q10'
+        ]);
+
+      allow read, update, delete: if isAdmin();
+    }
+
+
+    // ==================================================
+    // ADMIN RECORDS
+    // ==================================================
+
+    match /admins/{adminId} {
+
+      allow read: if
+        isSignedIn()
+        && request.auth.uid == adminId;
+
+      allow create, update, delete: if false;
+    }
+
+
+    // ==================================================
+    // MISSION USERS
+    // ==================================================
+
+    match /mission_users/{userId} {
+
+      // Super Admin can read all learners.
+      // Learner can read only their own record.
+      allow read: if
+        isAdmin()
+        || isOwnMissionUser();
+
+      // Mission-user lifecycle remains Admin controlled.
+      allow create, update, delete: if isAdmin();
+    }
+
+
+    // ==================================================
+    // MISSION ASSIGNMENTS
+    // ==================================================
+
+    match /mission_assignments/{assignmentId} {
+
+      // Admin requires complete Mission Control visibility.
+      //
+      // Current learner architecture queries assignments
+      // using journeyId after resolving mission_users.
+      allow read: if
+        isAdmin()
+        || isSignedIn();
+
+      // Only Admin can create or delete assignments.
+      allow create, delete: if isAdmin();
+
+      // Admin can perform any valid application update.
+      //
+      // Learner can only transition a RELEASED assignment
+      // into SUBMITTED and attach evidence.
+      allow update: if
+        isAdmin()
+        ||
+        (
+          isSignedIn()
+
+          // Immutable assignment identity
+          && request.resource.data.journeyId
+              == resource.data.journeyId
+
+          && request.resource.data.hour
+              == resource.data.hour
+
+          // Immutable mission definition
+          && request.resource.data.theme
+              == resource.data.theme
+
+          && request.resource.data.deliverable
+              == resource.data.deliverable
+
+          && request.resource.data.outcome
+              == resource.data.outcome
+
+          // Immutable release metadata
+          && request.resource.data.releasedAt
+              == resource.data.releasedAt
+
+          && request.resource.data.releasedBy
+              == resource.data.releasedBy
+
+          // Submission can happen only from RELEASED state
+          && resource.data.status == 'RELEASED'
+
+          && resource.data.submitted == false
+
+          // Required learner submission state
+          && request.resource.data.status == 'SUBMITTED'
+
+          && request.resource.data.submitted == true
+
+          && request.resource.data.reviewStatus == 'PENDING'
+
+          && request.resource.data.evidenceUrl is string
+        );
+    }
+
+
+    // ==================================================
+    // PUBLIC CREDENTIAL VERIFICATION
+    // ==================================================
+
+    match /public_credentials/{credentialId} {
+
+      // Public verification may read one exact credential.
+      // Listing/querying the complete registry is prohibited.
+      allow get: if true;
+
+      // Credential registry cannot be publicly listed.
+      allow list: if false;
+
+      // Registry lifecycle is controlled by authenticated
+      // SarlaYash Mission Control administrators.
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ==================================================
+    // DEFAULT DENY
+    // ==================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+  }
+}

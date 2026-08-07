@@ -1,0 +1,935 @@
+
+
+# EMERGENT AGENT MASTER PROMPT
+
+## Project Name
+
+# Visual DSA Operating System
+
+### Powered By Kapil
+
+**Copyright © 2026 Kapil. All Rights Reserved.**
+
+---
+
+# OBJECTIVE
+
+Build a **world-class HTML + CSS + JavaScript application** that helps students master DSA visually.
+
+This is NOT another LeetCode clone.
+
+This is a **Visual Learning Engine**.
+
+Students should actually **see their code execute** and identify bugs themselves.
+
+No backend.
+
+No database.
+
+No Firebase.
+
+No API.
+
+Everything should work locally.
+
+Open
+
+```text
+index.html
+```
+
+and start learning.
+
+---
+
+# TECHNOLOGY
+
+ONLY
+
+HTML5
+
+CSS3
+
+Vanilla JavaScript
+
+No frameworks.
+
+No React.
+
+No Angular.
+
+No Bootstrap.
+
+No Tailwind.
+
+No CDN dependencies unless absolutely necessary.
+
+Everything must work offline.
+
+---
+
+# START SCREEN
+
+Beautiful animated welcome page.
+
+Premium Fortune 500 style.
+
+Black
+
+White
+
+Gold
+
+Glassmorphism
+
+Minimal
+
+Animated background.
+
+---
+
+Display
+
+# Visual DSA Learning Engine
+
+Powered By Kapil
+
+Visual DSA Learning Engine
+
+---
+
+Student enters
+
+```text
+Your Name
+```
+
+Click
+
+START JOURNEY
+
+No signup.
+
+No login.
+
+No password.
+
+No email.
+
+---
+
+# HEADER
+
+Always visible.
+
+Left
+
+Logo
+
+Center
+
+Current Pattern
+
+Current Problem
+
+Right
+
+Current Date
+
+Current Time
+
+Live Clock
+
+Student Name
+
+Sign Out
+
+---
+
+Clock updates every second.
+
+---
+
+# SIGN OUT
+
+Returns to
+
+Welcome Screen.
+
+Clears
+
+Progress
+
+Session
+
+Current Question.
+
+---
+
+# DASHBOARD
+
+Immediately after entering name.
+
+Display
+
+36 Pattern Cards.
+
+Only
+
+36 patterns.
+
+Each pattern
+
+contains
+
+exactly
+
+1
+
+Easy
+
+Frequently Asked
+
+Interview Question.
+
+No Medium.
+
+No Hard.
+
+Version 1.
+
+---
+
+Example
+
+Array Traversal
+
+Progress
+
+Completed
+
+Time Taken
+
+Attempts
+
+Status
+
+---
+
+Every card displays
+
+Difficulty
+
+Easy
+
+Estimated Time
+
+15 Minutes
+
+XP
+
+Completion
+
+---
+
+# 36 PATTERNS
+
+Use one standard interview problem per pattern.
+
+Examples
+
+Array Traversal
+
+Two Pointer
+
+Sliding Window
+
+HashMap
+
+HashSet
+
+Prefix Sum
+
+Sorting
+
+Binary Search
+
+Recursion
+
+Backtracking
+
+Stack
+
+Queue
+
+Linked List
+
+Fast Slow Pointer
+
+Tree DFS
+
+Tree BFS
+
+BST
+
+Heap
+
+Greedy
+
+Graph BFS
+
+Graph DFS
+
+Union Find
+
+Topological Sort
+
+Trie
+
+Dynamic Programming
+
+Bit Manipulation
+
+Matrix
+
+Intervals
+
+Merge Intervals
+
+Monotonic Stack
+
+Monotonic Queue
+
+Divide and Conquer
+
+Math
+
+Simulation
+
+String Pattern
+
+Binary Indexed Thinking
+
+---
+
+# PROBLEM PAGE
+
+Looks like
+
+LeetCode
+
+*
+
+GeeksforGeeks
+
+*
+
+HackerRank
+
+Combined.
+
+---
+
+Show
+
+Problem Title
+
+Difficulty
+
+Pattern
+
+Companies
+
+Estimated Time
+
+---
+
+Then
+
+Problem Statement
+
+Constraints
+
+Input
+
+Output
+
+Sample Input
+
+Sample Output
+
+Explanation
+
+---
+
+No hints initially.
+
+---
+
+# CODE EDITOR
+
+Java only.
+
+Syntax Highlighting.
+
+Dark Theme.
+
+Line Numbers.
+
+Indentation.
+
+Undo
+
+Redo
+
+Clear
+
+Run
+
+Submit
+
+Reset
+
+---
+
+# TIMER
+
+Every problem
+
+15 Minutes
+
+Countdown
+
+15:00
+
+↓
+
+00:00
+
+---
+
+When timer ends
+
+Editor becomes read-only.
+
+Automatically reveal
+
+Complete Java Solution
+
+Algorithm
+
+Complexity
+
+Explanation
+
+---
+
+# TEST CASES
+
+Visible
+
+2 Sample Test Cases.
+
+Hidden
+
+10 Internal Test Cases.
+
+---
+
+After RUN
+
+Show
+
+```text
+✓ Test Case 1 Passed
+
+✓ Test Case 2 Passed
+
+✗ Hidden Test Case Failed
+```
+
+---
+
+Students should feel
+
+exactly
+
+like
+
+LeetCode.
+
+---
+
+# VISUAL EXECUTION ENGINE
+
+THIS IS THE USP.
+
+Whatever code student writes
+
+Visualize
+
+Execution.
+
+Example
+
+Bubble Sort
+
+Show
+
+Array
+
+↓
+
+Comparison
+
+↓
+
+Swap
+
+↓
+
+Updated Array
+
+↓
+
+Pointers
+
+↓
+
+Pass Complete
+
+---
+
+Linear Search
+
+Highlight
+
+Current Index
+
+Current Value
+
+Target
+
+Comparison
+
+---
+
+Binary Search
+
+Highlight
+
+Low
+
+Mid
+
+High
+
+Every iteration.
+
+---
+
+Linked List
+
+Animate
+
+Pointers
+
+Movement
+
+---
+
+Queue
+
+Front
+
+Rear
+
+---
+
+Stack
+
+Push
+
+Pop
+
+---
+
+Trees
+
+Traversal
+
+Animated
+
+---
+
+Graphs
+
+Visited
+
+Queue
+
+DFS Stack
+
+---
+
+Recursion
+
+Stack Frames
+
+Live
+
+---
+
+HashMap
+
+Show
+
+Insert
+
+Lookup
+
+Collision Concept
+
+---
+
+# VARIABLE WATCH
+
+Always visible.
+
+Shows
+
+i
+
+j
+
+left
+
+right
+
+mid
+
+count
+
+sum
+
+max
+
+min
+
+target
+
+Current Value
+
+Live.
+
+---
+
+# MEMORY PANEL
+
+Visual Memory.
+
+Show
+
+arr[0]
+
+arr[1]
+
+arr[2]
+
+Highlight
+
+Current
+
+Changed
+
+Compared
+
+---
+
+# CONSOLE
+
+Display
+
+Compilation Errors
+
+Runtime Errors
+
+Passed Tests
+
+Failed Tests
+
+Execution Time
+
+Memory Usage
+
+---
+
+# BUG DETECTOR
+
+Instead of
+
+Wrong Answer
+
+Show
+
+Possible Bug
+
+Examples
+
+Loop Condition Incorrect
+
+Index Out Of Bounds
+
+Wrong Comparison
+
+Forgot Base Case
+
+Array Overflow
+
+Null Handling
+
+Time Complexity Too High
+
+Wrong Pattern
+
+Guide
+
+Don't simply say
+
+Wrong.
+
+---
+
+# PATTERN DETECTOR
+
+Before opening editor
+
+Ask
+
+Which Pattern?
+
+Student chooses.
+
+After submission
+
+System shows
+
+Correct Pattern
+
+Reason
+
+---
+
+# PROGRESS TRACKER
+
+Track
+
+Problems Solved
+
+Problems Remaining
+
+Patterns Completed
+
+Average Time
+
+Attempts
+
+Best Time
+
+Success Rate
+
+---
+
+# DASHBOARD
+
+Student sees
+
+36 Patterns
+
+Green
+
+Completed
+
+Yellow
+
+In Progress
+
+Gray
+
+Locked
+
+---
+
+# CERTIFICATE MODE
+
+After
+
+36/36
+
+Generate
+
+Beautiful Completion Certificate
+
+Student Name
+
+Completion Date
+
+Time
+
+Brand
+
+Java DSA With Kapil
+
+Powered By Kapil
+
+Copyright © 2026
+
+Download as PNG.
+
+---
+
+# LEADERBOARD
+
+Local only.
+
+Top Attempts
+
+Fastest Time
+
+Best Accuracy
+
+Stored in browser Local Storage.
+
+---
+
+# LIVE PAGE
+
+Always show
+
+Current Date
+
+Current Time
+
+Running Session Timer
+
+Student Name
+
+Current Pattern
+
+Current Question
+
+---
+
+# LOCAL STORAGE
+
+Save
+
+Student Name
+
+Progress
+
+Completed Problems
+
+Timer
+
+Dashboard
+
+Automatically resume
+
+if browser refreshes.
+
+---
+
+# UI
+
+Fortune 500
+
+Premium
+
+Minimal
+
+Apple
+
+Stripe
+
+Linear
+
+Microsoft
+
+Inspired.
+
+Animations
+
+Smooth.
+
+No flashy colors.
+
+Black
+
+White
+
+Gold Accent.
+
+---
+
+# PERFORMANCE
+
+Must load under
+
+2 Seconds.
+
+Fully responsive.
+
+Desktop
+
+Tablet
+
+Mobile
+
+No lag.
+
+No broken layouts.
+
+---
+
+# QUALITY
+
+No placeholders.
+
+No lorem ipsum.
+
+No unfinished pages.
+
+No fake buttons.
+
+Every button must work.
+
+Every visualization must work.
+
+Every timer must work.
+
+Every progress bar must work.
+
+Every animation must work.
+
+Every problem must execute correctly.
+
+Test thoroughly before considering the project complete.
+
+---
+
+# FINAL EXPERIENCE
+
+The student should feel like they are using:
+
+* LeetCode for problem statements
+* GeeksforGeeks for explanations
+* VS Code for coding
+* A professional debugger for execution
+* A DSA animation tool for visualization
+
+But with one unique advantage:
+
+> **Every line of code they write comes alive through visualization, allowing them to understand logic, identify mistakes, and build true problem-solving skills instead of simply memorizing solutions.**
+
+This should be polished enough that if shown to engineering leaders at a Fortune 500 company, it would look like an internal developer training platform rather than a student project.

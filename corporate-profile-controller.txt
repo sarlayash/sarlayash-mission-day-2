@@ -1,0 +1,444 @@
+// ======================================================
+// SARLAYASH CORPORATE PROFILE V1 CONTROLLER
+// Validation + completeness + secure Firestore update.
+// ======================================================
+
+function bindCorporateProfile(student) {
+
+  const form =
+    document.querySelector(
+      '[data-corporate-profile-form]'
+    );
+
+  if (!form) {
+    return;
+  }
+
+
+  const message =
+    form.querySelector(
+      '[data-corporate-profile-message]'
+    );
+
+  const percentNode =
+    document.querySelector(
+      '[data-profile-percent]'
+    );
+
+  const progressNode =
+    document.querySelector(
+      '[data-profile-progress]'
+    );
+
+  const saveButton =
+    form.querySelector(
+      '.corporate-profile-save'
+    );
+
+
+  // ----------------------------------------------------
+  // HELPERS
+  // ----------------------------------------------------
+
+  const valueOf = name => {
+
+    const field =
+      form.elements.namedItem(name);
+
+    return String(
+      field?.value || ''
+    ).trim();
+
+  };
+
+
+  const listOf = name =>
+    valueOf(name)
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+
+
+  const validHttpUrl = value => {
+
+    if (!value) {
+      return true;
+    }
+
+    try {
+
+      const url =
+        new URL(value);
+
+      return (
+        url.protocol === 'https:' ||
+        url.protocol === 'http:'
+      );
+
+    } catch {
+      return false;
+    }
+
+  };
+
+
+  const validDomainUrl = (
+    value,
+    domain
+  ) => {
+
+    if (!value) {
+      return true;
+    }
+
+    try {
+
+      const url =
+        new URL(value);
+
+      const hostname =
+        url.hostname
+          .toLowerCase()
+          .replace(/^www\./, '');
+
+      return (
+        (
+          url.protocol === 'https:' ||
+          url.protocol === 'http:'
+        ) &&
+        (
+          hostname === domain ||
+          hostname.endsWith(
+            `.${domain}`
+          )
+        )
+      );
+
+    } catch {
+      return false;
+    }
+
+  };
+
+
+  // ----------------------------------------------------
+  // PROFILE COMPLETENESS
+  // ----------------------------------------------------
+
+  const updateCompleteness = () => {
+
+    const values = [
+
+      valueOf('mobile'),
+      valueOf('city'),
+      valueOf('headline'),
+      valueOf('about'),
+      valueOf('linkedinUrl'),
+      valueOf('githubUrl'),
+      valueOf('portfolioUrl'),
+      valueOf('skills'),
+      valueOf('domainsOfInterest')
+
+    ];
+
+
+    const completed =
+      values.filter(Boolean).length;
+
+
+    const percentage =
+      Math.round(
+        (
+          completed /
+          values.length
+        ) * 100
+      );
+
+
+    if (percentNode) {
+      percentNode.textContent =
+        `${percentage}%`;
+    }
+
+
+    if (progressNode) {
+      progressNode.style.width =
+        `${percentage}%`;
+    }
+
+  };
+
+
+  updateCompleteness();
+
+
+  form.addEventListener(
+    'input',
+    updateCompleteness
+  );
+
+
+  // ----------------------------------------------------
+  // SAVE PROFILE
+  // ----------------------------------------------------
+
+  form.addEventListener(
+    'submit',
+    async event => {
+
+      event.preventDefault();
+
+
+      if (!student?.documentId) {
+
+        if (message) {
+          message.textContent =
+            'Unable to identify your Mission profile.';
+        }
+
+        return;
+
+      }
+
+
+      const mobile =
+        valueOf('mobile');
+
+      const city =
+        valueOf('city');
+
+      const headline =
+        valueOf('headline');
+
+      const about =
+        valueOf('about');
+
+      const linkedinUrl =
+        valueOf('linkedinUrl');
+
+      const githubUrl =
+        valueOf('githubUrl');
+
+      const portfolioUrl =
+        valueOf('portfolioUrl');
+
+      const skills =
+        listOf('skills');
+
+      const domainsOfInterest =
+        listOf(
+          'domainsOfInterest'
+        );
+
+
+      // ------------------------------------------------
+      // VALIDATION
+      // ------------------------------------------------
+
+      const mobileDigits =
+        mobile.replace(/\D/g, '');
+
+
+      if (
+        mobile &&
+        (
+          mobileDigits.length < 7 ||
+          mobileDigits.length > 15
+        )
+      ) {
+
+        if (message) {
+          message.textContent =
+            'Please enter a valid mobile number.';
+        }
+
+        return;
+
+      }
+
+
+      if (
+        !validDomainUrl(
+          linkedinUrl,
+          'linkedin.com'
+        )
+      ) {
+
+        if (message) {
+          message.textContent =
+            'Please enter a valid LinkedIn URL.';
+        }
+
+        return;
+
+      }
+
+
+      if (
+        !validDomainUrl(
+          githubUrl,
+          'github.com'
+        )
+      ) {
+
+        if (message) {
+          message.textContent =
+            'Please enter a valid GitHub URL.';
+        }
+
+        return;
+
+      }
+
+
+      if (
+        !validHttpUrl(
+          portfolioUrl
+        )
+      ) {
+
+        if (message) {
+          message.textContent =
+            'Please enter a valid portfolio URL.';
+        }
+
+        return;
+
+      }
+
+
+      if (
+        headline.length > 160 ||
+        about.length > 1200
+      ) {
+
+        if (message) {
+          message.textContent =
+            'Please review the profile text limits.';
+        }
+
+        return;
+
+      }
+
+
+      const existingProfile =
+        student.professionalProfile ||
+        {};
+
+
+      const professionalProfile = {
+
+        mobile,
+        city,
+        headline,
+        about,
+        linkedinUrl,
+        githubUrl,
+        portfolioUrl,
+        skills,
+        domainsOfInterest,
+
+        profilePhotoURL:
+          String(
+            existingProfile
+              .profilePhotoURL ||
+            ''
+          ),
+
+        resumeURL:
+          String(
+            existingProfile
+              .resumeURL ||
+            ''
+          ),
+
+        updatedAt:
+          serverTimestamp()
+
+      };
+
+
+      if (saveButton) {
+
+        saveButton.disabled =
+          true;
+
+        saveButton.textContent =
+          'SAVING PROFILE...';
+
+      }
+
+
+      if (message) {
+        message.textContent =
+          'Updating your professional profile...';
+      }
+
+
+      try {
+
+        const userReference =
+          doc(
+            db,
+            'mission_users',
+            student.documentId
+          );
+
+
+        await updateDoc(
+          userReference,
+          {
+            professionalProfile
+          }
+        );
+
+
+        student.professionalProfile = {
+          ...professionalProfile,
+          updatedAt:
+            new Date()
+        };
+
+
+        if (message) {
+          message.textContent =
+            'PROFILE UPDATED SUCCESSFULLY';
+        }
+
+
+        updateCompleteness();
+
+
+      } catch (error) {
+
+        console.error(
+          'Corporate Profile Update Error:',
+          error
+        );
+
+
+        if (message) {
+          message.textContent =
+            'Profile could not be updated. Please try again.';
+        }
+
+
+      } finally {
+
+        if (saveButton) {
+
+          saveButton.disabled =
+            false;
+
+          saveButton.textContent =
+            'SAVE PROFESSIONAL PROFILE';
+
+        }
+
+      }
+
+    }
+  );
+
+}

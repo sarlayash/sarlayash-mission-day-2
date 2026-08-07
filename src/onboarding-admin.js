@@ -15,14 +15,12 @@ import {
   questions
 } from './questions.js';
 
-
 // ======================================================
 // STATE
 // ======================================================
 
 let root = null;
 let rows = [];
-
 
 // ======================================================
 // DOMAIN SIGNAL ENGINE
@@ -103,7 +101,6 @@ const domains = {
 
 };
 
-
 // ======================================================
 // HELPERS
 // ======================================================
@@ -120,7 +117,6 @@ const esc = value =>
         "'": '&#39;'
       })[character]
     );
-
 
 function formatDate(value) {
 
@@ -153,7 +149,6 @@ function formatDate(value) {
 
 }
 
-
 // ======================================================
 // TALENT SIGNAL
 // ======================================================
@@ -167,7 +162,6 @@ function signal(record) {
       )
       .join(' ')
       .toLowerCase();
-
 
   const matches =
     Object
@@ -203,7 +197,6 @@ function signal(record) {
           b[1] - a[1]
       );
 
-
   return {
 
     primary:
@@ -227,7 +220,6 @@ function signal(record) {
 
 }
 
-
 // ======================================================
 // ONBOARDING STATUS
 // ======================================================
@@ -238,7 +230,6 @@ function onboardingStatus(record) {
     record.adminReview
       ?.day3Status;
 
-
   if (
     status ===
     'APPROVED'
@@ -247,7 +238,6 @@ function onboardingStatus(record) {
     return 'APPROVED FOR DAY 3';
 
   }
-
 
   if (
     status ===
@@ -258,11 +248,9 @@ function onboardingStatus(record) {
 
   }
 
-
   return 'AWAITING REVIEW';
 
 }
-
 
 // ======================================================
 // LOAD RESPONSES
@@ -278,28 +266,36 @@ async function loadResponses() {
       )
     );
 
-
   rows =
-    snapshot.docs
-      .map(snapshot => {
+  snapshot.docs
 
-        const data =
-          snapshot.data();
+    .filter(snapshot => {
 
+      const data =
+        snapshot.data();
 
-        return {
+      return !data.archived;
 
-          id:
-            snapshot.id,
+    })
 
-          ...data,
+    .map(snapshot => {
 
-          sig:
-            signal(data)
+      const data =
+        snapshot.data();
 
-        };
+      return {
 
-      })
+        id:
+          snapshot.id,
+
+        ...data,
+
+        sig:
+          signal(data)
+
+      };
+
+    })
       .sort(
         (a, b) => {
 
@@ -308,7 +304,6 @@ async function loadResponses() {
 
           const nameB =
             b.candidate?.name || '';
-
 
           return nameA
             .localeCompare(
@@ -320,7 +315,6 @@ async function loadResponses() {
 
 }
 
-
 // ======================================================
 // MAIN ONBOARDING CONTROL
 // ======================================================
@@ -330,7 +324,6 @@ export async function showOnboardingControl(
 ) {
 
   root = container;
-
 
   root.innerHTML =
     `
@@ -343,7 +336,6 @@ export async function showOnboardingControl(
           ← SUPER ADMIN
         </button>
 
-
         <p
           class="eyebrow"
           style="margin-top:30px"
@@ -351,12 +343,10 @@ export async function showOnboardingControl(
           JOURNEY ENTRY CONTROL
         </p>
 
-
         <h2>
           Onboarding
           <em>Control.</em>
         </h2>
-
 
         <p class="intro">
           Every Journey begins with the
@@ -365,14 +355,12 @@ export async function showOnboardingControl(
           entry into Day 3 Mission.
         </p>
 
-
         <div id="onboarding-board">
           Loading assessments…
         </div>
 
       </section>
     `;
-
 
   document
     .querySelector('#super-home')
@@ -386,7 +374,6 @@ export async function showOnboardingControl(
 
     };
 
-
   try {
 
     await loadResponses();
@@ -396,7 +383,6 @@ export async function showOnboardingControl(
   } catch (error) {
 
     console.error(error);
-
 
     document
       .querySelector(
@@ -413,7 +399,6 @@ export async function showOnboardingControl(
 
 }
 
-
 // ======================================================
 // DASHBOARD
 // ======================================================
@@ -423,14 +408,12 @@ function drawDashboard() {
   const total =
     rows.length;
 
-
   const approved =
     rows.filter(
       record =>
         onboardingStatus(record) ===
         'APPROVED FOR DAY 3'
     ).length;
-
 
   const awaiting =
     rows.filter(
@@ -439,14 +422,12 @@ function drawDashboard() {
         'AWAITING REVIEW'
     ).length;
 
-
   const notApproved =
     rows.filter(
       record =>
         onboardingStatus(record) ===
         'NOT APPROVED'
     ).length;
-
 
   const tableRows =
     rows
@@ -457,7 +438,6 @@ function drawDashboard() {
             onboardingStatus(
               record
             );
-
 
           return `
             <tr
@@ -481,7 +461,6 @@ function drawDashboard() {
                 )}
               </td>
 
-
               <td>
 
                 <b>
@@ -502,7 +481,6 @@ function drawDashboard() {
 
               </td>
 
-
               <td>
                 ${esc(
                   record.candidate
@@ -510,18 +488,15 @@ function drawDashboard() {
                 )}
               </td>
 
-
               <td>
                 ${esc(
                   record.sig.primary
                 )}
               </td>
 
-
               <td>
                 ${esc(status)}
               </td>
-
 
               <td>
 
@@ -540,7 +515,6 @@ function drawDashboard() {
         }
       )
       .join('');
-
 
   document
     .querySelector(
@@ -563,7 +537,6 @@ function drawDashboard() {
 
           </article>
 
-
           <article>
 
             <small>
@@ -576,7 +549,6 @@ function drawDashboard() {
 
           </article>
 
-
           <article>
 
             <small>
@@ -588,7 +560,6 @@ function drawDashboard() {
             </b>
 
           </article>
-
 
           <article>
 
@@ -604,7 +575,6 @@ function drawDashboard() {
 
         </div>
 
-
         <div class="toolbar">
 
           <input
@@ -612,14 +582,12 @@ function drawDashboard() {
             placeholder="Search learner, Journey ID, email, course or status…"
           >
 
-
           <button
             class="ghost"
             id="onboarding-refresh"
           >
             REFRESH
           </button>
-
 
           <button
             class="ghost"
@@ -630,11 +598,9 @@ function drawDashboard() {
 
         </div>
 
-
         <h3 class="section-title">
           JOURNEY ENTRY PIPELINE
         </h3>
-
 
         <div class="signals">
 
@@ -650,7 +616,6 @@ function drawDashboard() {
 
           </div>
 
-
           <div class="signal">
 
             <span>
@@ -662,7 +627,6 @@ function drawDashboard() {
             </b>
 
           </div>
-
 
           <div class="signal">
 
@@ -678,11 +642,9 @@ function drawDashboard() {
 
         </div>
 
-
         <h3 class="section-title">
           LEARNERS
         </h3>
-
 
         <div class="table-wrap">
 
@@ -718,7 +680,6 @@ function drawDashboard() {
 
             </thead>
 
-
             <tbody>
 
               ${tableRows}
@@ -729,7 +690,6 @@ function drawDashboard() {
 
         </div>
       `;
-
 
   document
     .querySelectorAll(
@@ -746,7 +706,6 @@ function drawDashboard() {
             )
           ];
 
-
         showAssessment(
           record
         );
@@ -754,7 +713,6 @@ function drawDashboard() {
       };
 
     });
-
 
   document
     .querySelector(
@@ -766,7 +724,6 @@ function drawDashboard() {
         event.target.value
           .trim()
           .toLowerCase();
-
 
       document
         .querySelectorAll(
@@ -782,7 +739,6 @@ function drawDashboard() {
 
     };
 
-
   document
     .querySelector(
       '#onboarding-refresh'
@@ -795,7 +751,6 @@ function drawDashboard() {
         drawDashboard();
 
       };
-
 
   document
     .querySelector(
@@ -817,7 +772,6 @@ function showAssessment(record) {
       record
     );
 
-
   const answers =
     questions
       .map(
@@ -825,7 +779,6 @@ function showAssessment(record) {
 
           const key =
             `q${index + 1}`;
-
 
           return `
 
@@ -837,13 +790,11 @@ function showAssessment(record) {
                 ).padStart(2, '0')}
               </span>
 
-
               <h3>
                 ${esc(
                   question[0]
                 )}
               </h3>
-
 
               <p>
                 ${esc(
@@ -858,7 +809,6 @@ function showAssessment(record) {
         }
       )
       .join('');
-
 
   const directions =
     [
@@ -888,11 +838,9 @@ function showAssessment(record) {
               ).padStart(2, '0')}
             </small>
 
-
             <h3>
               ${esc(direction)}
             </h3>
-
 
             <p>
               Suggested from the learner's
@@ -904,7 +852,6 @@ function showAssessment(record) {
         `
       )
       .join('');
-
 
   root.innerHTML =
     `
@@ -918,14 +865,12 @@ function showAssessment(record) {
           ← BACK TO ONBOARDING CONTROL
         </button>
 
-
         <p
           class="eyebrow"
           style="margin-top:30px"
         >
           JOURNEY ENTRY REVIEW
         </p>
-
 
         <h2>
 
@@ -942,7 +887,6 @@ function showAssessment(record) {
 
         </h2>
 
-
         <div class="candidate">
 
           <strong>
@@ -951,7 +895,6 @@ function showAssessment(record) {
                 ?.email
             )}
           </strong>
-
 
           <span>
 
@@ -974,11 +917,9 @@ function showAssessment(record) {
 
         </div>
 
-
         <h3 class="section-title">
           ENTRY STATUS
         </h3>
-
 
         <div class="intelligence">
 
@@ -994,7 +935,6 @@ function showAssessment(record) {
 
           </article>
 
-
           <article>
 
             <small>
@@ -1008,7 +948,6 @@ function showAssessment(record) {
             </b>
 
           </article>
-
 
           <article>
 
@@ -1026,11 +965,9 @@ function showAssessment(record) {
 
         </div>
 
-
         <h3 class="section-title">
           TALENT INTELLIGENCE
         </h3>
-
 
         <div class="directions">
 
@@ -1038,11 +975,9 @@ function showAssessment(record) {
 
         </div>
 
-
         <h3 class="section-title">
           SUPER ADMIN REVIEW
         </h3>
-
 
         <form
           id="entry-review"
@@ -1064,7 +999,6 @@ function showAssessment(record) {
 
           </label>
 
-
           <label>
 
             Secondary Domain
@@ -1081,7 +1015,6 @@ function showAssessment(record) {
 
           </label>
 
-
           <label>
 
             Mentor Assigned
@@ -1096,7 +1029,6 @@ function showAssessment(record) {
 
           </label>
 
-
           <label>
 
             Priority
@@ -1110,7 +1042,6 @@ function showAssessment(record) {
             >
 
           </label>
-
 
           <label
             style="grid-column:1/-1"
@@ -1127,14 +1058,12 @@ function showAssessment(record) {
 
           </label>
 
-
           <button
             class="ghost"
             type="submit"
           >
             SAVE REVIEW NOTES
           </button>
-
 
           ${
             status !==
@@ -1153,26 +1082,32 @@ function showAssessment(record) {
               : ''
           }
 
+       ${
+  status !==
+  'NOT APPROVED'
+    ? `
 
-          ${
-            status !==
-            'NOT APPROVED'
-              ? `
+        <button
+          class="ghost"
+          type="button"
+          id="not-approved"
+        >
+          NOT APPROVED
+        </button>
 
-                  <button
-                    class="ghost"
-                    type="button"
-                    id="not-approved"
-                  >
-                    NOT APPROVED
-                  </button>
+      `
+    : ''
+}
 
-                `
-              : ''
-          }
+<button
+  class="ghost"
+  type="button"
+  id="archive-prospect"
+>
+  ARCHIVE PROSPECT
+</button>
 
         </form>
-
 
         ${
           record.adminReview
@@ -1193,17 +1128,14 @@ function showAssessment(record) {
             : ''
         }
 
-
         <h3 class="section-title">
           ORIGINAL 10-QUESTION ASSESSMENT
         </h3>
-
 
         ${answers}
 
       </section>
     `;
-
 
   document
     .querySelector(
@@ -1217,7 +1149,6 @@ function showAssessment(record) {
         );
 
       };
-
 
   document
     .querySelector(
@@ -1236,12 +1167,10 @@ function showAssessment(record) {
 
       };
 
-
   const approveButton =
     document.querySelector(
       '#approve-day3'
     );
-
 
   if (approveButton) {
 
@@ -1253,17 +1182,14 @@ function showAssessment(record) {
             `Approve ${record.candidate?.name} for Day 3 Mission?`
           );
 
-
         if (!confirmed) {
           return;
         }
-
 
         const form =
           document.querySelector(
             '#entry-review'
           );
-
 
         await saveReview(
           record,
@@ -1275,12 +1201,10 @@ function showAssessment(record) {
 
   }
 
-
   const rejectButton =
     document.querySelector(
       '#not-approved'
     );
-
 
   if (rejectButton) {
 
@@ -1292,17 +1216,14 @@ function showAssessment(record) {
             `Mark ${record.candidate?.name} as NOT APPROVED for Day 3?`
           );
 
-
         if (!confirmed) {
           return;
         }
-
 
         const form =
           document.querySelector(
             '#entry-review'
           );
-
 
         await saveReview(
           record,
@@ -1314,6 +1235,60 @@ function showAssessment(record) {
 
   }
 
+const archiveButton =
+  document.querySelector(
+    '#archive-prospect'
+  );
+
+if (archiveButton) {
+
+  archiveButton.onclick =
+    async () => {
+
+      const confirmed =
+        window.confirm(
+          `Archive ${record.candidate?.name}?\n\nThe prospect will be removed from the active onboarding dashboard but can be restored later.`
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+
+        await updateDoc(
+          doc(
+            db,
+            'day2_responses',
+            record.id
+          ),
+          {
+            archived: true,
+            archivedAt: serverTimestamp(),
+            archivedBy:
+              auth.currentUser?.email || ''
+          }
+        );
+
+        alert(
+          'Prospect archived successfully.'
+        );
+
+        window.location.reload();
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          `Unable to archive prospect: ${error.message}`
+        );
+
+      }
+
+    };
+
+}
 }
 
 // ======================================================
@@ -1331,10 +1306,8 @@ async function saveReview(
       new FormData(form)
     );
 
-
   const previous =
     record.adminReview || {};
-
 
   const adminReview = {
 
@@ -1374,7 +1347,6 @@ async function saveReview(
 
   };
 
-
   try {
 
     await updateDoc(
@@ -1387,7 +1359,6 @@ async function saveReview(
         adminReview
       }
     );
-
 
     if (
       decision ===
@@ -1415,16 +1386,13 @@ async function saveReview(
 
     }
 
-
     await loadResponses();
-
 
     const refreshed =
       rows.find(
         item =>
           item.id === record.id
       );
-
 
     if (refreshed) {
 
@@ -1442,7 +1410,6 @@ async function saveReview(
 
     console.error(error);
 
-
     alert(
       `Unable to save review: ${error.message}`
     );
@@ -1450,7 +1417,6 @@ async function saveReview(
   }
 
 }
-
 
 // ======================================================
 // CSV EXPORT
@@ -1472,7 +1438,6 @@ function exportCsv() {
           ' '
         )
         .trim()}"`;
-
 
   // ====================================================
   // CSV HEADERS
@@ -1518,7 +1483,6 @@ function exportCsv() {
     'Reviewed At'
 
   ];
-
 
   // ====================================================
   // LEARNER DATA ROWS
@@ -1602,7 +1566,6 @@ function exportCsv() {
 
   ];
 
-
   // ====================================================
   // CREATE UTF-8 CSV FILE
   // ====================================================
@@ -1619,22 +1582,18 @@ function exportCsv() {
       }
     );
 
-
   const url =
     URL.createObjectURL(
       blob
     );
-
 
   const anchor =
     document.createElement(
       'a'
     );
 
-
   anchor.href =
     url;
-
 
   anchor.download =
     `sarlayash-onboarding-control-${
@@ -1643,19 +1602,15 @@ function exportCsv() {
         .slice(0, 10)
     }.csv`;
 
-
   document.body.appendChild(
     anchor
   );
 
-
   anchor.click();
-
 
   document.body.removeChild(
     anchor
   );
-
 
   URL.revokeObjectURL(
     url

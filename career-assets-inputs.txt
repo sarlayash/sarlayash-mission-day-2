@@ -1,0 +1,17 @@
+<input
+  type="url"
+  name="profilePhotoURL"
+  maxlength="500"
+  value="${esc(profile.profilePhotoURL || '')}"
+  placeholder="https://..."
+>
+
+@@SPLIT@@
+
+<input
+  type="url"
+  name="resumeURL"
+  maxlength="500"
+  value="${esc(profile.resumeURL || '')}"
+  placeholder="Google Drive / OneDrive / Resume URL"
+>

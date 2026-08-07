@@ -1,0 +1,34 @@
+Use GitHub Pages — this app is static, so deployment is simple.
+Go to GitHub → New repository.
+Name: pattern-detective
+Set it to Public
+Create repository.
+
+Upload only these files from [PatternDetective](C:\\Users\\LC\\Documents\\Codex\\2026-07-31\\files-mentioned-by-the-user-bro\\outputs\\PatternDetective) into the repository root:
+index.html
+style.css
+app.js
+data.js
+README.md
+Important: index.html must be at the repository root — not inside another PatternDetective folder.
+
+Commit the upload to the main branch.
+
+In the GitHub repository, go to:
+Settings → Pages
+
+Under Build and deployment choose:
+Source: Deploy from a branch
+Branch: main
+Folder: / (root)
+Click Save.
+
+Wait 1–3 minutes. GitHub will show your live URL, usually:
+https://YOUR-GITHUB-USERNAME.github.io/pattern-detective/
+
+Open it on desktop and mobile. Test:
+Start Journey
+A complete quiz session
+Dashboard
+PDF report download
+Share/download badge

@@ -1,0 +1,285 @@
+// ======================================================
+// SARLAYASH CORPORATE PROFILE V1
+// Professional identity enrichment.
+// Official Mission identity remains system controlled.
+// ======================================================
+
+function corporateProfileMarkup(student) {
+
+  const profile =
+    student?.professionalProfile || {};
+
+  const skills =
+    Array.isArray(profile.skills)
+      ? profile.skills.join(', ')
+      : '';
+
+  const domains =
+    Array.isArray(profile.domainsOfInterest)
+      ? profile.domainsOfInterest.join(', ')
+      : '';
+
+  return `
+
+    <section class="corporate-profile">
+
+      <div class="corporate-profile-heading">
+
+        <div>
+          <p class="eyebrow">
+            MY PROFESSIONAL IDENTITY
+          </p>
+
+          <h2>
+            SarlaYash
+            <em>Corporate Profile.</em>
+          </h2>
+
+          <p class="corporate-profile-intro">
+            Build your professional presence while your
+            verified SarlaYash identity remains protected.
+          </p>
+        </div>
+
+        <div class="corporate-profile-lock">
+          <span>●</span>
+          VERIFIED IDENTITY
+        </div>
+
+      </div>
+
+
+      <div class="corporate-identity-grid">
+
+        <div class="corporate-identity-item">
+          <small>FULL NAME · LOCKED</small>
+          <strong>${esc(student.name || '—')}</strong>
+        </div>
+
+        <div class="corporate-identity-item">
+          <small>JOURNEY ID · LOCKED</small>
+          <strong>${esc(student.journeyId || '—')}</strong>
+        </div>
+
+        <div class="corporate-identity-item">
+          <small>REGISTERED EMAIL · LOCKED</small>
+          <strong>${esc(student.authEmail || '—')}</strong>
+        </div>
+
+        <div class="corporate-identity-item">
+          <small>COURSE · LOCKED</small>
+          <strong>${esc(student.course || '—')}</strong>
+        </div>
+
+        <div class="corporate-identity-item">
+          <small>MONTH · LOCKED</small>
+          <strong>${esc(student.month || '—')}</strong>
+        </div>
+
+      </div>
+
+
+      <div class="corporate-profile-completeness">
+
+        <div>
+          <small>PROFILE COMPLETENESS</small>
+          <strong data-profile-percent>0%</strong>
+        </div>
+
+        <div
+          class="corporate-profile-progress"
+          aria-label="Professional profile completeness"
+        >
+          <span data-profile-progress></span>
+        </div>
+
+      </div>
+
+
+      <form
+        class="corporate-profile-form"
+        data-corporate-profile-form
+      >
+
+        <div class="corporate-profile-section-title">
+          PROFESSIONAL DETAILS
+        </div>
+
+
+        <div class="corporate-profile-fields">
+
+          <label>
+            MOBILE NUMBER
+            <input
+              type="tel"
+              name="mobile"
+              maxlength="20"
+              autocomplete="tel"
+              value="${esc(profile.mobile || '')}"
+              placeholder="Professional contact number"
+            >
+          </label>
+
+
+          <label>
+            CITY / LOCATION
+            <input
+              type="text"
+              name="city"
+              maxlength="80"
+              autocomplete="address-level2"
+              value="${esc(profile.city || '')}"
+              placeholder="City"
+            >
+          </label>
+
+
+          <label class="corporate-profile-wide">
+            PROFESSIONAL HEADLINE
+            <input
+              type="text"
+              name="headline"
+              maxlength="160"
+              value="${esc(profile.headline || '')}"
+              placeholder="Example: Java Developer · AI Learner · Problem Solver"
+            >
+          </label>
+
+
+          <label class="corporate-profile-wide">
+            ABOUT ME
+            <textarea
+              name="about"
+              maxlength="1200"
+              rows="5"
+              placeholder="Write a concise professional introduction."
+            >${esc(profile.about || '')}</textarea>
+          </label>
+
+        </div>
+
+
+        <div class="corporate-profile-section-title">
+          PROFESSIONAL PRESENCE
+        </div>
+
+
+        <div class="corporate-profile-fields">
+
+          <label>
+            LINKEDIN
+            <input
+              type="url"
+              name="linkedinUrl"
+              maxlength="300"
+              value="${esc(profile.linkedinUrl || '')}"
+              placeholder="https://www.linkedin.com/in/..."
+            >
+          </label>
+
+
+          <label>
+            GITHUB
+            <input
+              type="url"
+              name="githubUrl"
+              maxlength="300"
+              value="${esc(profile.githubUrl || '')}"
+              placeholder="https://github.com/..."
+            >
+          </label>
+
+
+          <label class="corporate-profile-wide">
+            PORTFOLIO / WEBSITE
+            <input
+              type="url"
+              name="portfolioUrl"
+              maxlength="300"
+              value="${esc(profile.portfolioUrl || '')}"
+              placeholder="https://..."
+            >
+          </label>
+
+
+          <label class="corporate-profile-wide">
+            SKILLS
+            <input
+              type="text"
+              name="skills"
+              maxlength="500"
+              value="${esc(skills)}"
+              placeholder="Java, Python, DSA, Power BI..."
+            >
+            <small>
+              Separate skills with commas.
+            </small>
+          </label>
+
+
+          <label class="corporate-profile-wide">
+            DOMAINS OF INTEREST
+            <input
+              type="text"
+              name="domainsOfInterest"
+              maxlength="500"
+              value="${esc(domains)}"
+              placeholder="Artificial Intelligence, Cloud, Data Analytics..."
+            >
+            <small>
+              Separate domains with commas.
+            </small>
+          </label>
+
+        </div>
+
+
+        <div class="corporate-profile-section-title">
+          CAREER ASSETS
+        </div>
+
+
+        <div class="corporate-assets-grid">
+
+          <article>
+            <small>PROFILE PHOTO</small>
+            <strong>Professional Portrait</strong>
+            <p>UPLOAD COMING NEXT</p>
+          </article>
+
+          <article>
+            <small>RESUME</small>
+            <strong>PDF Resume</strong>
+            <p>UPLOAD COMING NEXT</p>
+          </article>
+
+        </div>
+
+
+        <p class="corporate-profile-privacy">
+          Professional information only. Government and
+          financial identity documents are not collected here.
+        </p>
+
+
+        <button
+          type="submit"
+          class="corporate-profile-save"
+        >
+          SAVE PROFESSIONAL PROFILE
+        </button>
+
+
+        <p
+          class="corporate-profile-message"
+          data-corporate-profile-message
+          aria-live="polite"
+        ></p>
+
+      </form>
+
+    </section>
+
+  `;
+
+}

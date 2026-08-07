@@ -1,0 +1,46 @@
+Open PowerShell in this folder:
+[sarlayash-day2](C:\\Users\\LC\\Documents\\Codex\\2026-08-02\\pl\\outputs\\sarlayash-day2)
+Then run:
+npm.cmd install
+npm.cmd run build
+npm.cmd run dev
+Open the local URL shown, usually:
+http://localhost:5173
+Before live submissions work, configure Firebase:
+Go to Firebase Console → create project.
+Add a Web App and copy its configuration values.
+In the project folder, copy .env.example to .env.
+Paste the Firebase values into .env.
+In Firebase:Enable Firestore Database in Production mode.
+Enable Authentication → Email/Password.
+Create one or more admin users in Authentication.
+Open Firestore Rules, paste the contents of firestore.rules, then publish.
+
+Restart the dev server after adding .env:
+npm.cmd run dev
+Use:
+Participant site: http://localhost:5173
+Admin dashboard: http://localhost:5173/admin
+Finally, deploy to Vercel:
+npm.cmd install -g vercel
+vercel
+In Vercel Project Settings → Environment Variables, add the same six VITE_FIREBASE_* values from .env, then redeploy.
+
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD4Ji_owu1t4lbXNsF6GEiruGYDF1zsX0U",
+  authDomain: "sarlayash-mission-day-2.firebaseapp.com",
+  projectId: "sarlayash-mission-day-2",
+  storageBucket: "sarlayash-mission-day-2.firebasestorage.app",
+  messagingSenderId: "805370423564",
+  appId: "1:805370423564:web:9e7dff20bf2b3518104129"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);

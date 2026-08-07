@@ -1,0 +1,610 @@
+/* =====================================================
+   SARLAYASH CORPORATE PROFILE V1
+   Executive Professional Identity System
+   ===================================================== */
+
+.corporate-profile {
+  position: relative;
+  overflow: hidden;
+
+  margin: 42px 0 34px;
+  padding: clamp(22px, 4vw, 38px);
+
+  border:
+    1px solid rgba(214, 177, 93, 0.28);
+
+  border-radius: 24px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(214, 177, 93, 0.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(18, 18, 18, 0.98),
+      rgba(6, 6, 6, 0.98)
+    );
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+
+.corporate-profile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(240, 213, 138, 0.72),
+      transparent
+    );
+}
+
+
+.corporate-profile-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+
+  margin-bottom: 28px;
+}
+
+
+.corporate-profile-heading h2 {
+  margin: 7px 0 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(27px, 4vw, 42px);
+
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+
+.corporate-profile-heading h2 em {
+  color: #f0d58a;
+  font-weight: 400;
+}
+
+
+.corporate-profile-intro {
+  max-width: 620px;
+  margin: 14px 0 0;
+
+  color: #aaa59a;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+.corporate-profile-lock {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 10px 14px;
+
+  border:
+    1px solid rgba(72, 224, 124, 0.25);
+
+  border-radius: 999px;
+
+  color: #67e58e;
+  background: rgba(72, 224, 124, 0.06);
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+
+
+.corporate-profile-lock span {
+  font-size: 8px;
+
+  text-shadow:
+    0 0 10px rgba(72, 224, 124, 0.9);
+}
+
+
+/* =====================================================
+   VERIFIED IDENTITY
+   ===================================================== */
+
+.corporate-identity-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-bottom: 26px;
+}
+
+
+.corporate-identity-item {
+  min-width: 0;
+
+  padding: 16px 17px;
+
+  border:
+    1px solid rgba(214, 177, 93, 0.13);
+
+  border-radius: 14px;
+
+  background:
+    rgba(255, 255, 255, 0.018);
+}
+
+
+.corporate-identity-item small {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #8e897e;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.13em;
+}
+
+
+.corporate-identity-item strong {
+  display: block;
+
+  overflow-wrap: anywhere;
+
+  color: #eee9dd;
+
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+
+/* =====================================================
+   COMPLETENESS
+   ===================================================== */
+
+.corporate-profile-completeness {
+  display: grid;
+  gap: 12px;
+
+  margin: 4px 0 30px;
+  padding: 17px 18px;
+
+  border:
+    1px solid rgba(214, 177, 93, 0.15);
+
+  border-radius: 14px;
+
+  background:
+    rgba(214, 177, 93, 0.035);
+}
+
+
+.corporate-profile-completeness > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+
+.corporate-profile-completeness small {
+  color: #a39d90;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+
+.corporate-profile-completeness strong {
+  color: #f0d58a;
+
+  font-size: 18px;
+}
+
+
+.corporate-profile-progress {
+  overflow: hidden;
+
+  width: 100%;
+  height: 6px;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.06);
+}
+
+
+.corporate-profile-progress span {
+  display: block;
+
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #9b7a38,
+      #d6b15d,
+      #f0d58a
+    );
+
+  box-shadow:
+    0 0 18px rgba(214, 177, 93, 0.32);
+
+  transition:
+    width 420ms ease;
+}
+
+
+/* =====================================================
+   FORM
+   ===================================================== */
+
+.corporate-profile-form {
+  margin: 0;
+}
+
+
+.corporate-profile-section-title {
+  margin:
+    30px 0 14px;
+
+  padding-bottom: 10px;
+
+  border-bottom:
+    1px solid rgba(214, 177, 93, 0.12);
+
+  color: #d6b15d;
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.19em;
+}
+
+
+.corporate-profile-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+
+.corporate-profile-fields label {
+  display: grid;
+  gap: 8px;
+
+  min-width: 0;
+
+  color: #aaa499;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+
+.corporate-profile-fields label > small {
+  color: #716d65;
+
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+
+.corporate-profile-wide {
+  grid-column: 1 / -1;
+}
+
+
+.corporate-profile-fields input,
+.corporate-profile-fields textarea {
+  width: 100%;
+
+  border:
+    1px solid rgba(214, 177, 93, 0.16);
+
+  border-radius: 12px;
+
+  outline: none;
+
+  padding: 13px 14px;
+
+  color: #f5f1e8;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+
+.corporate-profile-fields textarea {
+  min-height: 120px;
+  resize: vertical;
+
+  line-height: 1.65;
+}
+
+
+.corporate-profile-fields input::placeholder,
+.corporate-profile-fields textarea::placeholder {
+  color: #5f5b54;
+}
+
+
+.corporate-profile-fields input:focus,
+.corporate-profile-fields textarea:focus {
+  border-color:
+    rgba(240, 213, 138, 0.58);
+
+  background:
+    rgba(214, 177, 93, 0.045);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(214, 177, 93, 0.07);
+}
+
+
+/* =====================================================
+   CAREER ASSETS
+   ===================================================== */
+
+.corporate-assets-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+.corporate-assets-grid article {
+  min-width: 0;
+
+  padding: 18px;
+
+  border:
+    1px dashed rgba(214, 177, 93, 0.24);
+
+  border-radius: 14px;
+
+  background:
+    rgba(214, 177, 93, 0.025);
+}
+
+
+.corporate-assets-grid small {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #918a7d;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+
+
+.corporate-assets-grid strong {
+  display: block;
+
+  color: #e7e0d2;
+
+  font-size: 14px;
+}
+
+
+.corporate-assets-grid p {
+  margin: 8px 0 0;
+
+  color: #d6b15d;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+
+/* =====================================================
+   PRIVACY + SAVE
+   ===================================================== */
+
+.corporate-profile-privacy {
+  margin: 24px 0 18px;
+
+  padding: 13px 15px;
+
+  border-left:
+    2px solid rgba(214, 177, 93, 0.42);
+
+  color: #817c72;
+
+  background:
+    rgba(255, 255, 255, 0.015);
+
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+
+.corporate-profile-save {
+  width: 100%;
+
+  padding: 15px 20px;
+
+  border:
+    1px solid #d6b15d;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  color: #080808;
+
+  background:
+    linear-gradient(
+      135deg,
+      #b58b3c,
+      #f0d58a,
+      #c69c4b
+    );
+
+  font-size: 11px;
+  font-weight: 950;
+  letter-spacing: 0.13em;
+
+  box-shadow:
+    0 12px 34px
+    rgba(214, 177, 93, 0.12);
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+
+.corporate-profile-save:hover {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 15px 38px
+    rgba(214, 177, 93, 0.2);
+}
+
+
+.corporate-profile-save:focus-visible {
+  outline:
+    2px solid #f0d58a;
+
+  outline-offset: 3px;
+}
+
+
+.corporate-profile-save:disabled {
+  cursor: wait;
+
+  opacity: 0.55;
+  transform: none;
+}
+
+
+.corporate-profile-message {
+  min-height: 20px;
+
+  margin: 12px 0 0;
+
+  color: #d6b15d;
+
+  text-align: center;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 720px) {
+
+  .corporate-profile {
+    margin:
+      30px 0 26px;
+
+    padding:
+      22px 16px;
+
+    border-radius: 18px;
+  }
+
+
+  .corporate-profile-heading {
+    display: grid;
+    gap: 18px;
+  }
+
+
+  .corporate-profile-lock {
+    justify-self: start;
+  }
+
+
+  .corporate-identity-grid,
+  .corporate-profile-fields,
+  .corporate-assets-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .corporate-profile-wide {
+    grid-column: auto;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .corporate-profile-heading h2 {
+    font-size: 28px;
+  }
+
+
+  .corporate-identity-item {
+    padding: 14px;
+  }
+
+
+  .corporate-profile-fields input,
+  .corporate-profile-fields textarea {
+    font-size: 16px;
+  }
+
+}

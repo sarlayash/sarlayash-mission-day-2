@@ -1,0 +1,382 @@
+/* =====================================================
+   SARLAYASH TALENT IDENTITY CARD V1.2
+   Executive read-only professional presentation layer.
+   ===================================================== */
+
+.talent-identity-card {
+  position: relative;
+  overflow: hidden;
+
+  margin: 0 0 34px;
+  padding: 28px;
+
+  border: 1px solid rgba(214, 177, 93, 0.32);
+  border-radius: 22px;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(214, 177, 93, 0.12),
+      transparent 34%
+    ),
+    linear-gradient(
+      145deg,
+      rgba(20, 20, 20, 0.98),
+      rgba(5, 5, 5, 0.99)
+    );
+
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+
+.talent-identity-card::before {
+  content: "";
+
+  position: absolute;
+  inset: 0 auto 0 0;
+
+  width: 3px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f0d58a,
+      #9f762e,
+      transparent
+    );
+}
+
+
+.talent-identity-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+
+  margin-bottom: 26px;
+
+  color: #d6b15d;
+
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+
+.talent-identity-verified {
+  color: #f0d58a;
+  white-space: nowrap;
+}
+
+
+.talent-identity-main {
+  display: grid;
+
+  grid-template-columns:
+    112px minmax(0, 1fr);
+
+  gap: 26px;
+  align-items: center;
+}
+
+
+.talent-identity-portrait {
+  width: 112px;
+  height: 112px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(240, 213, 138, 0.45);
+  border-radius: 20px;
+
+  background: #0b0b0b;
+
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.4);
+}
+
+
+.talent-identity-portrait img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+.talent-identity-initials {
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(240, 213, 138, 0.16),
+      rgba(198, 156, 75, 0.04)
+    );
+
+  color: #f0d58a;
+
+  font-size: 30px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+
+.talent-identity-kicker {
+  margin: 0 0 7px;
+
+  color: #a98b4c;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+
+
+.talent-identity-content h3 {
+  margin: 0;
+
+  color: #f7f2e7;
+
+  font-size: clamp(25px, 4vw, 38px);
+  line-height: 1.05;
+}
+
+
+.talent-identity-headline {
+  max-width: 720px;
+
+  margin: 10px 0 0;
+
+  color: rgba(247, 242, 231, 0.72);
+
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+
+.talent-identity-meta {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+
+.talent-identity-meta > span {
+  padding: 12px;
+
+  border: 1px solid rgba(214, 177, 93, 0.14);
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+
+.talent-identity-meta small,
+.talent-identity-about small,
+.talent-identity-stack > small {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #9f8247;
+
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+
+.talent-identity-meta strong {
+  display: block;
+
+  overflow-wrap: anywhere;
+
+  color: #e8dfca;
+
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+
+.talent-identity-about,
+.talent-identity-stack {
+  margin-top: 22px;
+  padding-top: 20px;
+
+  border-top:
+    1px solid rgba(214, 177, 93, 0.13);
+}
+
+
+.talent-identity-about p {
+  max-width: 900px;
+
+  margin: 0;
+
+  color: rgba(247, 242, 231, 0.72);
+
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+
+.talent-identity-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+
+.talent-identity-chips span {
+  padding: 7px 10px;
+
+  border: 1px solid rgba(214, 177, 93, 0.22);
+  border-radius: 999px;
+
+  background: rgba(214, 177, 93, 0.055);
+
+  color: #e4c97f;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+
+.talent-domain-chips span {
+  background: rgba(255, 255, 255, 0.025);
+
+  color: #d8d0bd;
+}
+
+
+.talent-identity-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+
+.talent-identity-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 38px;
+  padding: 0 15px;
+
+  border: 1px solid rgba(214, 177, 93, 0.32);
+  border-radius: 10px;
+
+  background: rgba(214, 177, 93, 0.06);
+
+  color: #e8cc82;
+
+  text-decoration: none;
+
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+
+.talent-identity-action:hover {
+  transform: translateY(-1px);
+
+  border-color: rgba(240, 213, 138, 0.65);
+
+  background: rgba(214, 177, 93, 0.12);
+}
+
+
+.talent-identity-action:focus-visible {
+  outline: 2px solid #f0d58a;
+  outline-offset: 3px;
+}
+
+
+.talent-identity-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+
+  margin-top: 26px;
+  padding-top: 16px;
+
+  border-top:
+    1px solid rgba(214, 177, 93, 0.16);
+
+  color: rgba(214, 177, 93, 0.6);
+
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+
+/* =====================================================
+   TALENT IDENTITY RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 720px) {
+
+  .talent-identity-card {
+    padding: 20px 16px;
+  }
+
+  .talent-identity-main {
+    grid-template-columns: 1fr;
+  }
+
+  .talent-identity-portrait {
+    width: 92px;
+    height: 92px;
+  }
+
+  .talent-identity-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .talent-identity-footer {
+    display: grid;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .talent-identity-topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .talent-identity-actions {
+    display: grid;
+  }
+
+  .talent-identity-action {
+    width: 100%;
+  }
+
+}

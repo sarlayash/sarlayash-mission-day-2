@@ -1,0 +1,337 @@
+// ======================================================
+// SARLAYASH TALENT IDENTITY CARD V1.2
+// Read-only professional presentation layer.
+// Uses existing professionalProfile data only.
+// ======================================================
+
+function talentIdentityMarkup(student) {
+
+  const profile =
+    student?.professionalProfile || {};
+
+
+  const safeProfileUrl = value => {
+
+    const raw =
+      String(value || '').trim();
+
+    if (!raw) {
+      return '';
+    }
+
+    try {
+
+      const url =
+        new URL(raw);
+
+      if (
+        url.protocol !== 'https:' &&
+        url.protocol !== 'http:'
+      ) {
+        return '';
+      }
+
+      return url.href;
+
+    } catch {
+      return '';
+    }
+
+  };
+
+
+  const photoUrl =
+    safeProfileUrl(
+      profile.profilePhotoURL
+    );
+
+  const linkedinUrl =
+    safeProfileUrl(
+      profile.linkedinUrl
+    );
+
+  const githubUrl =
+    safeProfileUrl(
+      profile.githubUrl
+    );
+
+  const portfolioUrl =
+    safeProfileUrl(
+      profile.portfolioUrl
+    );
+
+  const resumeUrl =
+    safeProfileUrl(
+      profile.resumeURL
+    );
+
+
+  const skills =
+    Array.isArray(profile.skills)
+      ? profile.skills.filter(Boolean)
+      : [];
+
+
+  const domains =
+    Array.isArray(
+      profile.domainsOfInterest
+    )
+      ? profile.domainsOfInterest.filter(Boolean)
+      : [];
+
+
+  const initials =
+    String(student?.name || 'SY')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part =>
+        part.charAt(0).toUpperCase()
+      )
+      .join('') || 'SY';
+
+
+  const actionLink = (
+    url,
+    label
+  ) => {
+
+    if (!url) {
+      return '';
+    }
+
+    return `
+      <a
+        class="talent-identity-action"
+        href="${esc(url)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ${esc(label)}
+      </a>
+    `;
+
+  };
+
+
+  return `
+
+    <div class="talent-identity-card">
+
+      <div class="talent-identity-topline">
+
+        <span>
+          SARLAYASH TALENT IDENTITY
+        </span>
+
+        <span class="talent-identity-verified">
+          ● VERIFIED
+        </span>
+
+      </div>
+
+
+      <div class="talent-identity-main">
+
+        <div class="talent-identity-portrait">
+
+          ${
+            photoUrl
+
+              ? `
+                  <img
+                    src="${esc(photoUrl)}"
+                    alt="${esc(
+                      student?.name ||
+                      'Professional profile'
+                    )}"
+                    loading="lazy"
+                    referrerpolicy="no-referrer"
+                  >
+                `
+
+              : `
+                  <div
+                    class="talent-identity-initials"
+                    aria-label="Profile initials"
+                  >
+                    ${esc(initials)}
+                  </div>
+                `
+          }
+
+        </div>
+
+
+        <div class="talent-identity-content">
+
+          <p class="talent-identity-kicker">
+            PROFESSIONAL TALENT PASSPORT
+          </p>
+
+          <h3>
+            ${esc(
+              student?.name ||
+              'SarlaYash Learner'
+            )}
+          </h3>
+
+          <p class="talent-identity-headline">
+            ${esc(
+              profile.headline ||
+              'Building professional identity through the SarlaYash Mission.'
+            )}
+          </p>
+
+
+          <div class="talent-identity-meta">
+
+            <span>
+              <small>JOURNEY ID</small>
+              <strong>
+                ${esc(
+                  student?.journeyId ||
+                  '—'
+                )}
+              </strong>
+            </span>
+
+            <span>
+              <small>ROLE</small>
+              <strong>
+                ${esc(DAY1_JOB_TITLE)}
+              </strong>
+            </span>
+
+            <span>
+              <small>LOCATION</small>
+              <strong>
+                ${esc(
+                  profile.city ||
+                  'Not added'
+                )}
+              </strong>
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      ${
+        profile.about
+
+          ? `
+              <div class="talent-identity-about">
+
+                <small>PROFESSIONAL SUMMARY</small>
+
+                <p>
+                  ${esc(profile.about)}
+                </p>
+
+              </div>
+            `
+
+          : ''
+      }
+
+
+      ${
+        skills.length
+
+          ? `
+              <div class="talent-identity-stack">
+
+                <small>CORE SKILLS</small>
+
+                <div class="talent-identity-chips">
+
+                  ${skills
+                    .slice(0, 12)
+                    .map(
+                      skill =>
+                        `<span>${esc(skill)}</span>`
+                    )
+                    .join('')}
+
+                </div>
+
+              </div>
+            `
+
+          : ''
+      }
+
+
+      ${
+        domains.length
+
+          ? `
+              <div class="talent-identity-stack">
+
+                <small>DOMAINS OF INTEREST</small>
+
+                <div class="talent-identity-chips talent-domain-chips">
+
+                  ${domains
+                    .slice(0, 8)
+                    .map(
+                      domain =>
+                        `<span>${esc(domain)}</span>`
+                    )
+                    .join('')}
+
+                </div>
+
+              </div>
+            `
+
+          : ''
+      }
+
+
+      <div class="talent-identity-actions">
+
+        ${actionLink(
+          linkedinUrl,
+          'VIEW LINKEDIN'
+        )}
+
+        ${actionLink(
+          githubUrl,
+          'VIEW GITHUB'
+        )}
+
+        ${actionLink(
+          portfolioUrl,
+          'VIEW PORTFOLIO'
+        )}
+
+        ${actionLink(
+          resumeUrl,
+          'VIEW RESUME'
+        )}
+
+      </div>
+
+
+      <div class="talent-identity-footer">
+
+        <span>
+          SARLAYASH LEARNING SOLUTIONS LLP
+        </span>
+
+        <span>
+          VERIFIED PROFESSIONAL IDENTITY
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
+
+}

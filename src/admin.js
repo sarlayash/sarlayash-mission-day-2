@@ -344,10 +344,13 @@ async function verifyAdmin(user) {
 
 async function loadOverview() {
 
+  // SARLAYASH_EMAIL_COUNT_V1
+
   const [
     assessmentSnapshot,
     missionUserSnapshot,
-    assignmentSnapshot
+    assignmentSnapshot,
+    emailAuditSnapshot
   ] = await Promise.all([
 
     getDocs(
@@ -368,6 +371,13 @@ async function loadOverview() {
       collection(
         db,
         'mission_assignments'
+      )
+    ),
+
+    getDocs(
+      collection(
+        db,
+        'email_audit'
       )
     )
 
@@ -453,7 +463,10 @@ async function loadOverview() {
 
     missionReviewsPending,
 
-    approvedMissionHours
+    approvedMissionHours,
+
+    emailsSent:
+      emailAuditSnapshot.size
 
   };
 
@@ -602,6 +615,19 @@ function drawSuperAdminHome(
           <b>
             ${overview.missionLearners}
           </b>
+
+        </article>
+
+
+        <article>
+
+          <small>
+            EMAILS SENT
+          </small>
+
+          <strong>
+            ${overview.emailsSent}
+          </strong>
 
         </article>
 
