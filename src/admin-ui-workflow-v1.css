@@ -1,0 +1,218 @@
+/* =========================================================
+   SARLAYASH COMMAND CENTRE — UI ONLY WORKFLOW POLISH V1
+   No logic, data, Firebase, routing or event-handler changes.
+   Append AFTER the existing admin.css.
+   ========================================================= */
+
+/* --- Command-centre workflow row --- */
+.directions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.directions > article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 360px;
+  padding: 24px;
+  box-sizing: border-box;
+  border: 1px solid rgba(218,178,61,.26);
+  background: linear-gradient(180deg, rgba(18,16,11,.96), rgba(10,10,8,.96));
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Subtle workflow connector on desktop */
+.directions > article:not(:last-child)::after {
+  content: '›';
+  position: absolute;
+  right: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  color: var(--gold2);
+  font: 600 30px/1 'Playfair Display';
+  background: #0b0a08;
+  border: 1px solid rgba(218,178,61,.35);
+  border-radius: 50%;
+}
+
+/* Workflow step labels — visual only */
+.directions > article:nth-child(1) > small,
+.directions > article:nth-child(2) > small,
+.directions > article:nth-child(3) > small {
+  font-size: 0;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 24px;
+  padding: 4px 9px;
+  border: 1px solid rgba(218,178,61,.55);
+  border-radius: 3px;
+  color: var(--gold2);
+  background: rgba(218,178,61,.045);
+  letter-spacing: 1.5px;
+}
+
+.directions > article:nth-child(1) > small::after,
+.directions > article:nth-child(2) > small::after,
+.directions > article:nth-child(3) > small::after {
+  font-size: 10px;
+  font-family: 'DM Mono';
+}
+
+.directions > article:nth-child(1) > small::after { content: 'STEP 01 · FIRST STEP'; }
+.directions > article:nth-child(2) > small::after { content: 'STEP 02 · ONBOARDING'; }
+.directions > article:nth-child(3) > small::after { content: 'STEP 03 · MISSION'; }
+
+/* Proper workflow titles — visual only; existing text remains untouched */
+.directions > article:nth-child(1) > h3,
+.directions > article:nth-child(2) > h3,
+.directions > article:nth-child(3) > h3 {
+  font-size: 0;
+  line-height: 1.2;
+  min-height: 54px;
+  margin: 18px 0 12px;
+  color: var(--ink);
+}
+
+.directions > article:nth-child(1) > h3::after,
+.directions > article:nth-child(2) > h3::after,
+.directions > article:nth-child(3) > h3::after {
+  font-size: 24px;
+  line-height: 1.2;
+  font-family: 'Playfair Display';
+  font-weight: 600;
+}
+
+.directions > article:nth-child(1) > h3::after { content: 'Lead & Offer Control'; }
+.directions > article:nth-child(2) > h3::after { content: 'Onboarding & Profile Review'; }
+.directions > article:nth-child(3) > h3::after { content: 'Mission Execution & Progress'; }
+
+.directions > article > p {
+  line-height: 1.65;
+  margin: 0 0 13px;
+}
+
+.directions > article > p strong {
+  color: var(--ink);
+}
+
+.directions > article > button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: auto;
+  box-sizing: border-box;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+/* Make the system-intelligence/pipeline block feel secondary */
+.directions > article:nth-child(4) {
+  grid-column: 1 / -1;
+  min-height: 150px;
+}
+
+/* If the current DOM has exactly three workflow cards followed by
+   Journey Pipeline, keep the pipeline full-width rather than dropping
+   underneath the first card. */
+.directions > article:nth-child(4) h3 {
+  margin-bottom: 8px;
+}
+
+/* --- Laptop / tablet: keep the workflow as ONE horizontal array --- */
+@media (max-width: 1100px) and (min-width: 721px) {
+  .directions {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 4px 4px 18px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .directions > article {
+    flex: 0 0 min(340px, 31vw);
+    scroll-snap-align: start;
+  }
+
+  .directions > article:nth-child(4) {
+    flex: 0 0 min(520px, 60vw);
+  }
+
+  .directions > article:not(:last-child)::after {
+    right: -15px;
+  }
+}
+
+/* --- Mobile: horizontal workflow tabs/cards, no cramped stacking --- */
+@media (max-width: 720px) {
+  .section-title {
+    margin-top: 34px;
+    margin-bottom: 14px;
+  }
+
+  .directions {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 4px 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .directions > article {
+    flex: 0 0 min(86vw, 330px);
+    min-height: 390px;
+    padding: 20px;
+    scroll-snap-align: center;
+  }
+
+  .directions > article:nth-child(4) {
+    flex: 0 0 min(86vw, 330px);
+    min-height: 250px;
+  }
+
+  .directions > article:not(:last-child)::after {
+    display: none;
+  }
+
+  .directions > article:nth-child(1) > h3::after,
+  .directions > article:nth-child(2) > h3::after,
+  .directions > article:nth-child(3) > h3::after {
+    font-size: 22px;
+  }
+
+  .directions > article > p {
+    font-size: 13px;
+  }
+
+  .directions > article > button {
+    min-height: 50px;
+  }
+}
+
+/* --- Very small phones --- */
+@media (max-width: 430px) {
+  .directions > article {
+    flex-basis: 88vw;
+  }
+
+  .directions > article:nth-child(1) > small::after,
+  .directions > article:nth-child(2) > small::after,
+  .directions > article:nth-child(3) > small::after {
+    font-size: 9px;
+  }
+}
