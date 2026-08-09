@@ -25,10 +25,6 @@ import {
   showMissionControl
 } from './mission-admin.js';
 
-import {
-  showLeadOfferControl
-} from './lead-offer-admin.js';
-
 
 // ======================================================
 // ROOT + STATE
@@ -748,51 +744,7 @@ function drawSuperAdminHome(
 
         </article>
 
-    <article>
 
-      <small>
-        CONTROL 03
-      </small>
-
-      <h3>
-        Lead & Offer Control
-      </h3>
-
-      <p>
-        Review prospective learners from the
-        SarlaYash recruitment pipeline and
-        manage offer decisions from one
-        controlled workspace.
-      </p>
-
-      <p>
-
-        <strong>
-          Source:
-        </strong>
-
-        Google Sheet — Form Responses 1
-
-      </p>
-
-      <p>
-
-        <strong>
-          Decision Mode:
-        </strong>
-
-        Read-only verification
-
-      </p>
-
-      <button
-        class="gold"
-        id="open-lead-offer"
-      >
-        OPEN LEAD & OFFER CONTROL →
-      </button>
-
-    </article>
         <article>
 
           <small>
@@ -888,16 +840,7 @@ function drawSuperAdminHome(
           currentAdmin
         );
 
-document
-  .querySelector(
-    '#open-lead-offer'
-  )
-  .onclick =
-  () =>
-    showLeadOfferControl(
-  root,
-  currentAdmin
-);
+
   document
     .querySelector(
       '#refresh-super'

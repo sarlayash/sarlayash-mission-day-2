@@ -895,9 +895,8 @@ document
   .onclick =
   () =>
     showLeadOfferControl(
-  root,
-  currentAdmin
-);
+      root
+    );
   document
     .querySelector(
       '#refresh-super'
