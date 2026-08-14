@@ -46,7 +46,7 @@ export function executiveHighlightsMarkup() {
 
     <a
       class="executive-cta"
-      href="https://razorpay.me/@sarlayash"
+      href="https://razorpay.me/@kapilnarula3733"
       target="_blank"
       rel="noopener"
     >

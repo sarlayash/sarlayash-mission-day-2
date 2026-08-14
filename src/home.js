@@ -1390,7 +1390,7 @@ ${executiveHighlightsMarkup()}
 
   <a
       class="bulletin-join"
-      href="https://razorpay.me/@sarlayash"
+      href="https://razorpay.me/@kapilnarula3733"
       target="_blank"
       rel="noopener"
   >
