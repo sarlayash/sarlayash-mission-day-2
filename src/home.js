@@ -1285,7 +1285,17 @@ ${executiveHighlightsMarkup()}
   <div class="bulletin-ribbon">
     🔥 NEW HIGHLIGHTS
   </div>
+<p>
+  <a href="https://hackathons.sarlayash.com" target="_blank" rel="noopener">
+    🏆 SarlaYash Hackathons
+  </a>
+</p>
 
+<p>
+  <a href="https://dawk.sarlayash.com" target="_blank" rel="noopener">
+    📊 Data Analytics With Kapil (11 Levels)
+  </a>
+</p>
   <h2>
     Internship-as-a-Service
     <span>(IaaS)</span>
