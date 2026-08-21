@@ -46,7 +46,7 @@ export function executiveHighlightsMarkup() {
 
     <a
       class="executive-cta"
-      href="https://razorpay.me/@kapilnarula3733"
+      href="upi://pay?pa=9873152277@KOTAK&pn=Kapil%20Narula"
       target="_blank"
       rel="noopener"
     >
