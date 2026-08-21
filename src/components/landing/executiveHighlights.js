@@ -46,7 +46,7 @@ export function executiveHighlightsMarkup() {
 
     <a
       class="executive-cta"
-      href="upi://pay?pa=9873152277@KOTAK&pn=Kapil%20Narula"
+      href="/payment.html"
       target="_blank"
       rel="noopener"
     >
