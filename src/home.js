@@ -32,7 +32,7 @@ const ecosystem = [
   },
 
   {
-    name: 'SarlaYash Official — WWW',
+    name: 'SarlaYash Official â€” WWW',
     description:
       'Primary www gateway to the SarlaYash ecosystem.',
     url: 'https://www.sarlayash.com/'
@@ -98,7 +98,7 @@ const clocks = [
 
   {
     id: 'india',
-    city: 'INDIA · IST',
+    city: 'INDIA Â· IST',
     zone: 'Asia/Kolkata',
     primary: true
   },
@@ -151,14 +151,14 @@ const frameworkUniverse = [
   ['LinkedIn Built-In-Public AI University', 'CORE', 'INITIATIVE'],
   ['Zero-To-Infinity Learning Framework', 'CORE', 'FRAMEWORK'],
   ['10% Theory + 90% Hands-On Framework', 'CORE', 'FRAMEWORK'],
-  ['One Phone · One Social Media Account · Infinite Possibilities Framework', 'CORE', 'FRAMEWORK'],
+  ['One Phone Â· One Social Media Account Â· Infinite Possibilities Framework', 'CORE', 'FRAMEWORK'],
   ['SarlaYash Blessings', 'CORE', 'INITIATIVE'],
   ['Internship-As-A-Service (IaaS) Framework', 'CORE', 'FRAMEWORK'],
   ['Plug-and-Play Learning Engineer Framework', 'CORE', 'FRAMEWORK'],
   ['Learning Intelligence Framework', 'CORE', 'FRAMEWORK'],
   ['Placement Readiness Framework', 'CORE', 'FRAMEWORK'],
   ['Batch Learning Intelligence Progress Framework', 'CORE', 'FRAMEWORK'],
-  ['PIQ – Programming IQ Framework', 'CORE', 'FRAMEWORK'],
+  ['PIQ â€“ Programming IQ Framework', 'CORE', 'FRAMEWORK'],
 
   // AI
   ['AI Ladder With Kapil | Powered By SarlaYash', 'AI', 'SERIES'],
@@ -197,8 +197,8 @@ const frameworkUniverse = [
   // CAREER
   ['Polish Aptitude With Kapil | Powered By SarlaYash', 'CAREER', 'SERIES'],
   ['Placement Readiness With Kapil', 'CAREER', 'LEARNING TRACK'],
-  ['Programming IQ – PIQ 1.0', 'CAREER', 'EXPERIENCE'],
-  ['Programming IQ – PIQ 2.0', 'CAREER', 'EXPERIENCE'],
+  ['Programming IQ â€“ PIQ 1.0', 'CAREER', 'EXPERIENCE'],
+  ['Programming IQ â€“ PIQ 2.0', 'CAREER', 'EXPERIENCE'],
   ['Learning Intelligence Performance Card', 'CAREER', 'PRODUCT'],
   ['Career Path Intelligence Framework', 'CAREER', 'FRAMEWORK'],
   ['Placement Readiness Intelligence Framework', 'CAREER', 'FRAMEWORK'],
@@ -238,7 +238,7 @@ const frameworkUniverse = [
   ['Ethical Hacking Zero-To-Infinity Series', 'TECHNOLOGY', 'SERIES'],
 
   // THOUGHT LEADERSHIP
-  ['Founder’s Life', 'THOUGHT LEADERSHIP', 'SERIES'],
+  ['Founderâ€™s Life', 'THOUGHT LEADERSHIP', 'SERIES'],
   ['Indianism Series', 'THOUGHT LEADERSHIP', 'SERIES'],
   ['Mindful Fun Friday', 'THOUGHT LEADERSHIP', 'SERIES'],
   ['Mind Your Words Tuesday', 'THOUGHT LEADERSHIP', 'SERIES'],
@@ -275,7 +275,7 @@ const frameworkSpotlights = [
   },
   {
     code: '02',
-    name: '10% Theory · 90% Hands-On',
+    name: '10% Theory Â· 90% Hands-On',
     text: 'A practice-led approach where explanation supports action, building and evidence.'
   },
   {
@@ -436,7 +436,7 @@ function renderHome() {
       <div class="command-bar">
 
         <div class="command-brand">
-          SARLAYASH · DIGITAL ECOSYSTEM
+          SARLAYASH Â· DIGITAL ECOSYSTEM
         </div>
 
         <div class="live-status">
@@ -517,7 +517,7 @@ function renderHome() {
           aria-label="Switch colour theme"
           title="Switch colour theme"
         >
-          <span id="sy-theme-icon">☀</span>
+          <span id="sy-theme-icon">â˜€</span>
           <small id="sy-theme-label">LIGHT</small>
         </button>
 
@@ -673,7 +673,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -705,7 +705,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                LIVE EXPERIENCE ↗
+                LIVE EXPERIENCE â†—
               </a>
 
               <a
@@ -713,7 +713,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -744,7 +744,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                LIVE EXPERIENCE ↗
+                LIVE EXPERIENCE â†—
               </a>
 
               <a
@@ -752,7 +752,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -783,7 +783,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -814,7 +814,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -845,7 +845,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -875,7 +875,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -906,7 +906,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -937,7 +937,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -969,7 +969,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                LIVE EXPERIENCE ↗
+                LIVE EXPERIENCE â†—
               </a>
 
               <a
@@ -977,7 +977,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -1008,7 +1008,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                VIEW SOURCE ↗
+                VIEW SOURCE â†—
               </a>
 
             </div>
@@ -1044,7 +1044,7 @@ ${executiveHighlightsMarkup()}
             target="_blank"
             rel="noopener noreferrer"
           >
-            EXPLORE ALL PROJECTS ON GITHUB ↗
+            EXPLORE ALL PROJECTS ON GITHUB â†—
           </a>
 
         </div>
@@ -1095,7 +1095,7 @@ ${executiveHighlightsMarkup()}
             </p>
 
             <div class="evidence-statement">
-              BUILT · EXECUTED · DOCUMENTED · EVOLVING
+              BUILT Â· EXECUTED Â· DOCUMENTED Â· EVOLVING
             </div>
 
           </div>
@@ -1283,23 +1283,23 @@ ${executiveHighlightsMarkup()}
 <section class="bulletin-board">
 
   <div class="bulletin-ribbon">
-    🔥 NEW HIGHLIGHTS
+    ðŸ”¥ NEW HIGHLIGHTS
   </div>
+  <h2>
+    Internship-as-a-Service
+    <span>(IaaS)</span>
+  </h2>
 <p>
   <a href="https://hackathons.sarlayash.com" target="_blank" rel="noopener">
-    🏆 SarlaYash Hackathons
+    ðŸ† SarlaYash Hackathons
   </a>
 </p>
 
 <p>
   <a href="https://dawk.sarlayash.com" target="_blank" rel="noopener">
-    📊 Data Analytics With Kapil (11 Levels)
+    ðŸ“Š Data Analytics With Kapil (11 Levels)
   </a>
 </p>
-  <h2>
-    Internship-as-a-Service
-    <span>(IaaS)</span>
-  </h2>
 
   <p class="bulletin-intro">
     Learn by doing. Build real projects.
@@ -1309,28 +1309,28 @@ ${executiveHighlightsMarkup()}
   <div class="bulletin-grid">
 
     <article>
-      <h3>🎯 2 Industry Missions</h3>
+      <h3>ðŸŽ¯ 2 Industry Missions</h3>
       <p>
         Complete two structured real-world missions.
       </p>
     </article>
 
     <article>
-      <h3>🚀 Capstone Project</h3>
+      <h3>ðŸš€ Capstone Project</h3>
       <p>
         Build one portfolio-ready industry project.
       </p>
     </article>
 
     <article>
-      <h3>🏆 LIVE Hackathon</h3>
+      <h3>ðŸ† LIVE Hackathon</h3>
       <p>
         Experience collaborative real-world problem solving.
       </p>
     </article>
 
     <article>
-      <h3>⭐ Review • Elevate Me</h3>
+      <h3>â­ Review â€¢ Elevate Me</h3>
       <p>
         Personalized feedback on your work,
         resume and professional growth.
@@ -1338,14 +1338,14 @@ ${executiveHighlightsMarkup()}
     </article>
 
     <article>
-      <h3>📜 Certificate</h3>
+      <h3>ðŸ“œ Certificate</h3>
       <p>
         Public branding with verified SarlaYash certificate.
       </p>
     </article>
 
     <article>
-      <h3>👨‍💼 Work With CEO</h3>
+      <h3>ðŸ‘¨â€ðŸ’¼ Work With CEO</h3>
       <p>
         Direct exposure to real execution,
         reviews and mentorship.
@@ -1353,7 +1353,7 @@ ${executiveHighlightsMarkup()}
     </article>
 
     <article>
-      <h3>🌟 Wall Of Fame</h3>
+      <h3>ðŸŒŸ Wall Of Fame</h3>
       <p>
         Outstanding interns earn recognition
         on the official SarlaYash Wall Of Fame.
@@ -1364,7 +1364,7 @@ ${executiveHighlightsMarkup()}
 
   <div class="bulletin-pricing">
 
-      <h3>Why ₹101?</h3>
+      <h3>Why â‚¹101?</h3>
 
       <p>
         This is NOT an admission fee.
@@ -1372,23 +1372,23 @@ ${executiveHighlightsMarkup()}
 
       <p>
 
-        ₹101 demonstrates commitment and supports:
+        â‚¹101 demonstrates commitment and supports:
 
       </p>
 
       <ul>
 
-        <li>✔ Better attendance</li>
+        <li>âœ” Better attendance</li>
 
-        <li>✔ Mentor guidance</li>
+        <li>âœ” Mentor guidance</li>
 
-        <li>✔ Weekly reviews</li>
+        <li>âœ” Weekly reviews</li>
 
-        <li>✔ Personalized feedback</li>
+        <li>âœ” Personalized feedback</li>
 
       </ul>
 
-      <h2>₹101 / Week</h2>
+      <h2>â‚¹101 / Week</h2>
 
       <p>
 
@@ -1400,12 +1400,12 @@ ${executiveHighlightsMarkup()}
 
   <a
       class="bulletin-join"
-      href="https://razorpay.me/@kapilnarula3733"
+      href="upi://pay?pa=9873152277@KOTAK&pn=Kapil%20Narula"
       target="_blank"
       rel="noopener"
   >
 
-      JOIN NOW @ ₹101
+      JOIN NOW @ â‚¹101
 
   </a>
 
@@ -1463,7 +1463,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                KNOW ME FIRST →
+                KNOW ME FIRST â†’
               </a>
             </div>
 
@@ -1493,7 +1493,7 @@ ${executiveHighlightsMarkup()}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                START DAY 1 →
+                START DAY 1 â†’
               </a>
             </div>
 
@@ -1521,7 +1521,7 @@ ${executiveHighlightsMarkup()}
                 class="join-link"
                 href="mailto:namaste@sarlayash.com?subject=SarlaYash%20Mission%20-%20Journey%20Completion"
               >
-                NAMASTE@SARLAYASH.COM →
+                NAMASTE@SARLAYASH.COM â†’
               </a>
             </div>
 
@@ -1543,7 +1543,7 @@ ${executiveHighlightsMarkup()}
             </small>
 
             <strong>
-              Completion creates eligibility for consideration —
+              Completion creates eligibility for consideration â€”
               not automatic entry.
             </strong>
 
@@ -1580,7 +1580,7 @@ ${executiveHighlightsMarkup()}
               target="_blank"
               rel="noopener noreferrer"
             >
-              KAPIL NARULA · LINKEDIN ↗
+              KAPIL NARULA Â· LINKEDIN â†—
             </a>
 
             <a
@@ -1588,7 +1588,7 @@ ${executiveHighlightsMarkup()}
               target="_blank"
               rel="noopener noreferrer"
             >
-              SARLAYASH · LINKEDIN ↗
+              SARLAYASH Â· LINKEDIN â†—
             </a>
 
           </div>
@@ -1610,7 +1610,7 @@ ${executiveHighlightsMarkup()}
           <div>
 
             <p class="section-label">
-              LIVE · GLOBAL TIME DESK
+              LIVE Â· GLOBAL TIME DESK
             </p>
 
             <h2>
@@ -1685,7 +1685,7 @@ ${executiveHighlightsMarkup()}
           <div>
 
             <p class="section-label">
-              LIVE · ECOSYSTEM STATUS
+              LIVE Â· ECOSYSTEM STATUS
             </p>
 
             <h2>
@@ -1711,7 +1711,7 @@ ${executiveHighlightsMarkup()}
             </small>
 
             <strong>
-              ● LIVE
+              â— LIVE
             </strong>
 
             <div class="metric-note">
@@ -1728,7 +1728,7 @@ ${executiveHighlightsMarkup()}
             </small>
 
             <strong id="visitor-count">
-              —
+              â€”
             </strong>
 
             <div
@@ -1835,7 +1835,7 @@ ${executiveHighlightsMarkup()}
         </div>
 
         <div class="footer-copy">
-          © 2026 SARLAYASH MISSION 2026 ·
+          Â© 2026 SARLAYASH MISSION 2026 Â·
           ALL RIGHTS RESERVED
         </div>
 
@@ -2097,7 +2097,7 @@ async function activateVisitorIntelligence() {
 
 
     countElement.textContent =
-      '—';
+      'â€”';
 
 
     noteElement.textContent =
@@ -2156,7 +2156,7 @@ function activateSarlaYashTheme() {
 
     if (icon) {
       icon.textContent =
-        light ? '🌙' : '☀';
+        light ? 'ðŸŒ™' : 'â˜€';
     }
 
     if (label) {
@@ -2287,7 +2287,7 @@ function activateSarlaYashQuickHeader() {
           }
         ).format(now)
         .toUpperCase() +
-        ' · IST';
+        ' Â· IST';
 
     }
 
@@ -2384,7 +2384,7 @@ function activateSarlaYashQuickHeader() {
     'Back to top'
   );
 
-  topButton.innerHTML = '↑';
+  topButton.innerHTML = 'â†‘';
 
   document.body.appendChild(
     topButton
